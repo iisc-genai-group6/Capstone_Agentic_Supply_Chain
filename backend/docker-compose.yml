@@ -1,0 +1,84 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: scdp-api
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    env_file:
+      - .env
+    environment:
+      POSTGRES_HOST: postgres
+      REDIS_HOST: redis
+      QDRANT_HOST: qdrant
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      qdrant:
+        condition: service_started
+    volumes:
+      - ./app:/app/app
+    networks:
+      - scdp-network
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: scdp-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-scdp}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-scdp_secret}
+      POSTGRES_DB: ${POSTGRES_DB:-scdp}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-scdp} -d ${POSTGRES_DB:-scdp}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - scdp-network
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: scdp-redis
+    command: redis-server --appendonly yes
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - scdp-network
+    restart: unless-stopped
+
+  qdrant:
+    image: qdrant/qdrant:v1.12.5
+    container_name: scdp-qdrant
+    ports:
+      - "${QDRANT_PORT:-6333}:6333"
+      - "${QDRANT_GRPC_PORT:-6334}:6334"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    networks:
+      - scdp-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+  qdrant_data:
+
+networks:
+  scdp-network:
+    driver: bridge
