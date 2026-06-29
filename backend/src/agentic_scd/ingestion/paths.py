@@ -1,22 +1,33 @@
-"""Filesystem locations the ingestion layer reads/writes.
+from __future__ import annotations
 
-Resolved relative to the repo root so they work under the local ``uv`` workflow.
-``fallback/`` holds committed offline-replay data; ``seed/`` holds committed
-historical snapshots the Phase 1c batch loaders read; ``snapshots/`` holds live raw
-pulls (gitignored). The root config files (``sources.yaml``, ``lexicon.yaml``) live
-at the repo root, matching the structure in specs/data-ingestion.md.
-"""
-
+import os
 from pathlib import Path
 
-# registry.py lives at <root>/src/agentic_scd/ingestion/ -> parents[3] is the root.
-REPO_ROOT = Path(__file__).resolve().parents[3]
+from agentic_scd.config import get_settings
 
-FALLBACK_DIR = REPO_ROOT / "data" / "fallback"
-# Committed historical snapshots the Phase 1c batch loaders read (offline source of
-# truth; committed like FALLBACK_DIR, distinct from the gitignored SNAPSHOT_DIR).
-SEED_DIR = REPO_ROOT / "data" / "seed"
-SNAPSHOT_DIR = REPO_ROOT / "data" / "snapshots"
+PACKAGE_ROOT = Path(__file__).resolve().parents[1]
+ASSET_DIR = PACKAGE_ROOT / "assets"
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
 
-SOURCES_YAML = REPO_ROOT / "sources.yaml"
-LEXICON_YAML = REPO_ROOT / "lexicon.yaml"
+
+def existing_path(*candidates: Path) -> Path:
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate
+    return candidates[-1]
+
+
+def config_path(name: str) -> Path:
+    env_name = f"AGENTIC_SCD_{name.upper().replace('.', '_')}"
+    raw = os.getenv(env_name)
+    if raw:
+        return Path(raw).expanduser()
+    return existing_path(Path.cwd() / name, PROJECT_ROOT / name, ASSET_DIR / name)
+
+
+FALLBACK_DIR = existing_path(PROJECT_ROOT / "data" / "fallback", ASSET_DIR / "fallback")
+SEED_DIR = existing_path(PROJECT_ROOT / "data" / "seed", ASSET_DIR / "seed")
+SOURCES_YAML = config_path("sources.yaml")
+LEXICON_YAML = config_path("lexicon.yaml")
+SNAPSHOT_DIR = get_settings().data_dir / "snapshots"
+RUN_DIR = get_settings().data_dir / "runs"

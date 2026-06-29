@@ -1,0 +1,63 @@
+{
+  "index": "Freightos Baltic Index (FBX)",
+  "unit": "USD per 40ft container (FEU)",
+  "note": "SYNTHETIC sample (hand-authored, not real Freightos quotes) for offline batch seeding. See data/seed/README.md for provenance.",
+  "rows": [
+    {
+      "date": "2026-05-04",
+      "lane_code": "FBX01",
+      "lane": "China/East Asia to North America West Coast",
+      "rate_usd_feu": 2185,
+      "change_pct": 3.4
+    },
+    {
+      "date": "2026-05-04",
+      "lane_code": "FBX03",
+      "lane": "China/East Asia to North America East Coast",
+      "rate_usd_feu": 3460,
+      "change_pct": 2.1
+    },
+    {
+      "date": "2026-05-04",
+      "lane_code": "FBX11",
+      "lane": "China/East Asia to North Europe",
+      "rate_usd_feu": 2890,
+      "change_pct": -1.6
+    },
+    {
+      "date": "2026-05-04",
+      "lane_code": "FBX13",
+      "lane": "China/East Asia to Mediterranean",
+      "rate_usd_feu": 3120,
+      "change_pct": 0.8
+    },
+    {
+      "date": "2026-05-11",
+      "lane_code": "FBX01",
+      "lane": "China/East Asia to North America West Coast",
+      "rate_usd_feu": 2340,
+      "change_pct": 7.1
+    },
+    {
+      "date": "2026-05-11",
+      "lane_code": "FBX03",
+      "lane": "China/East Asia to North America East Coast",
+      "rate_usd_feu": 3510,
+      "change_pct": 1.4
+    },
+    {
+      "date": "2026-05-11",
+      "lane_code": "FBX11",
+      "lane": "China/East Asia to North Europe",
+      "rate_usd_feu": 2805,
+      "change_pct": -2.9
+    },
+    {
+      "date": "2026-05-11",
+      "lane_code": "FBX13",
+      "lane": "China/East Asia to Mediterranean",
+      "rate_usd_feu": 3185,
+      "change_pct": 2.1
+    }
+  ]
+}

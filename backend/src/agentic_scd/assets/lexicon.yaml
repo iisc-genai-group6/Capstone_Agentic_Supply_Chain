@@ -1,0 +1,36 @@
+# Stage 1 relevance lexicon — curated supply-chain disruption keywords. A normalized
+# signal with zero hits is dropped (recall-favoring: keep some noise rather than miss a
+# real disruption). Matched case-insensitively against title + body by relevance.py.
+# Loaded from the repo root; re-tune freely and re-run (raw pulls are snapshotted).
+
+keywords:
+  - strike
+  - embargo
+  - shortage
+  - typhoon
+  - hurricane
+  - storm
+  - flood
+  - flooding
+  - blockade
+  - congestion
+  - recall
+  - shutdown
+  - tariff
+  - delay
+  - disrupt
+  - disruption
+  - port
+  - shipping
+  - freight
+  - logistics
+  - factory
+  - supplier
+  - supply chain
+  - closure
+  - closed
+  - halt
+  - backlog
+  - gale
+  - earthquake
+  - sanction

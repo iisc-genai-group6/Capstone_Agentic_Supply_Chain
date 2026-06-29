@@ -1,0 +1,76 @@
+[project]
+name = "agentic-scd"
+version = "1.0.1"
+description = "Agentic Supply Chain Disruption Predictor and Simulation Engine"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "apscheduler>=3.10",
+    "fastapi>=0.110",
+    "feedparser>=6.0",
+    "gradio>=4.44",
+    "httpx>=0.27",
+    "langgraph>=0.2",
+    "numpy>=1.26",
+    "pandas>=2.1",
+    "pydantic>=2.6",
+    "python-dotenv>=1.0",
+    "pyyaml>=6.0",
+    "scikit-learn>=1.4",
+    "simpy>=4.1",
+    "uvicorn>=0.30"
+]
+
+[project.optional-dependencies]
+full = [
+    "chromadb>=0.5",
+    "mcp>=1.2",
+    "prophet>=1.1",
+    "sentence-transformers>=3.0",
+    "torch>=2.2",
+    "transformers>=4.44"
+]
+
+[project.scripts]
+agentic-scd = "agentic_scd.__main__:main"
+agentic-scd-api = "agentic_scd.api.app:main"
+agentic-scd-batch = "agentic_scd.ingestion.batch_cli:main"
+agentic-scd-collect = "agentic_scd.ingestion.collect:main"
+agentic-scd-dashboard = "agentic_scd.ui.gradio_app:main"
+agentic-scd-evaluate = "agentic_scd.evaluation.metrics:main"
+agentic-scd-generate-data = "agentic_scd.data.generate:main"
+agentic-scd-ingest = "agentic_scd.ingestion.service:main"
+agentic-scd-mcp = "agentic_scd.mcp.server:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.6"
+]
+notebooks = [
+    "ipykernel>=6.29",
+    "jupyterlab>=4.2"
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["backend/src/agentic_scd"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 88
+src = ["backend/src", "backend/tests"]
+extend-exclude = ["docs"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.ruff.lint.per-file-ignores]
+"**/__init__.py" = ["F401"]
+
+[tool.pytest.ini_options]
+testpaths = ["backend/tests"]
+addopts = "-q"

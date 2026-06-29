@@ -1,0 +1,66 @@
+{
+  "dataset": "Kaggle SupplyChainNet (historical extract)",
+  "note": "SYNTHETIC sample (hand-authored, not real Kaggle dataset rows) for offline batch seeding. Two record kinds: 'demand' baseline time-series and 'disruption' KB-history text. See data/seed/README.md for provenance.",
+  "records": [
+    {
+      "kind": "demand",
+      "date": "2026-01-15",
+      "region": "South Asia",
+      "product_category": "Consumer Electronics",
+      "demand_units": 18250,
+      "description": "Historical supply chain demand baseline for consumer electronics logistics in the South Asia lane."
+    },
+    {
+      "kind": "demand",
+      "date": "2026-02-15",
+      "region": "South Asia",
+      "product_category": "Consumer Electronics",
+      "demand_units": 19880,
+      "description": "Historical supply chain demand baseline for consumer electronics logistics in the South Asia lane."
+    },
+    {
+      "kind": "demand",
+      "date": "2026-03-15",
+      "region": "Western Europe",
+      "product_category": "Automotive Parts",
+      "demand_units": 12640,
+      "description": "Historical supply chain demand baseline for automotive parts logistics in the Western Europe lane."
+    },
+    {
+      "kind": "demand",
+      "date": "2026-04-15",
+      "region": "North America",
+      "product_category": "Pharmaceuticals",
+      "demand_units": 9420,
+      "description": "Historical supply chain demand baseline for pharmaceutical shipping in the North America lane."
+    },
+    {
+      "kind": "disruption",
+      "date": "2025-11-08",
+      "region": "East Asia",
+      "disruption_type": "Port congestion",
+      "description": "Severe port congestion at a major East Asia container hub caused multi-week shipping delays and a backlog of consumer electronics components."
+    },
+    {
+      "kind": "disruption",
+      "date": "2025-12-02",
+      "region": "Western Europe",
+      "disruption_type": "Supplier shutdown",
+      "description": "An unplanned supplier factory shutdown after flooding triggered an automotive parts shortage across the Western Europe supply chain."
+    },
+    {
+      "kind": "disruption",
+      "date": "2026-01-20",
+      "region": "Red Sea",
+      "disruption_type": "Route blockade",
+      "description": "A shipping route blockade forced freight rerouting around the Red Sea, raising logistics costs and delaying Mediterranean-bound cargo."
+    },
+    {
+      "kind": "disruption",
+      "date": "2026-02-27",
+      "region": "North America",
+      "disruption_type": "Labor strike",
+      "description": "A port labor strike on the North America West Coast halted container handling and created a significant freight backlog."
+    }
+  ]
+}

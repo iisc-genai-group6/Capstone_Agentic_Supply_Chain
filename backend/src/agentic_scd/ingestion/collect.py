@@ -1,12 +1,4 @@
-"""On-demand collector entrypoint (console script ``agentic-scd-collect``).
-
-Runs every enabled connector once through the full pipeline —
-fetch -> snapshot -> normalize -> relevance gate -> dedupe -> persist — and prints a
-per-source summary (fetched / kept / dropped / persisted / fallback). Graceful
-end-to-end: a fully offline run (no network, no DB) still yields signals from the
-synthetic connector and cached fallbacks and never crashes. The scheduled poller and
-FastAPI webhook are Phase 1b.
-"""
+from __future__ import annotations
 
 import logging
 from dataclasses import dataclass, field
@@ -24,8 +16,6 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class SourceResult:
-    """Per-connector tally for one collection run."""
-
     name: str
     fetched: int = 0
     kept: int = 0
@@ -36,31 +26,26 @@ class SourceResult:
 
 @dataclass
 class CollectSummary:
-    """Outcome of a collection run across all enabled connectors."""
-
     db_persisted: bool = False
     results: list[SourceResult] = field(default_factory=list)
 
     @property
     def totals(self) -> SourceResult:
-        agg = SourceResult(name="TOTAL")
-        for r in self.results:
-            agg.fetched += r.fetched
-            agg.kept += r.kept
-            agg.dropped += r.dropped
-            agg.persisted += r.persisted
-        return agg
+        total = SourceResult(name="TOTAL")
+        for result in self.results:
+            total.fetched += result.fetched
+            total.kept += result.kept
+            total.dropped += result.dropped
+            total.persisted += result.persisted
+        return total
 
 
-def process_connector(connector: Connector, conn) -> SourceResult:  # noqa: ANN001
-    """Run one connector through the pipeline. ``conn`` is a DB connection or None."""
+def process_connector(connector: Connector, conn) -> SourceResult:
     result = SourceResult(name=connector.name)
-
     raw_items, path = fetch_with_fallback(connector)
     result.fetched = len(raw_items)
     result.fallback_used = path == "fallback"
     write_snapshot(connector.name, raw_items)
-
     signals = [normalize(item, connector) for item in raw_items]
     ingested = ingest_signals(signals, conn)
     result.kept = ingested.kept
@@ -70,15 +55,11 @@ def process_connector(connector: Connector, conn) -> SourceResult:  # noqa: ANN0
 
 
 def collect(settings: Settings | None = None) -> CollectSummary:
-    """Run all enabled connectors once and return the run summary."""
     settings = settings or get_settings()
     db_ready = init_db(settings)
     summary = CollectSummary(db_persisted=db_ready)
-
-    conn = None
+    conn = connect(settings) if db_ready else None
     try:
-        if db_ready:
-            conn = connect(settings)
         for connector in load_registry():
             summary.results.append(process_connector(connector, conn))
     finally:
@@ -88,31 +69,21 @@ def collect(settings: Settings | None = None) -> CollectSummary:
 
 
 def print_summary(summary: CollectSummary) -> None:
-    where = "Postgres" if summary.db_persisted else "no DB (in-memory only)"
+    where = "SQLite" if summary.db_persisted else "in-memory"
     print(f"Collection complete - persistence: {where}")
-    header = (
-        f"{'source':<20}{'fetched':>9}{'kept':>7}"
-        f"{'dropped':>9}{'persisted':>11}{'path':>11}"
-    )
+    header = f"{'source':<20}{'fetched':>9}{'kept':>7}{'dropped':>9}{'persisted':>11}{'path':>11}"
     print(header)
     print("-" * len(header))
-    for r in summary.results:
-        path = "fallback" if r.fallback_used else "live"
-        print(
-            f"{r.name:<20}{r.fetched:>9}{r.kept:>7}{r.dropped:>9}{r.persisted:>11}{path:>11}"
-        )
-    t = summary.totals
+    for result in summary.results:
+        path = "fallback" if result.fallback_used else "live"
+        print(f"{result.name:<20}{result.fetched:>9}{result.kept:>7}{result.dropped:>9}{result.persisted:>11}{path:>11}")
+    total = summary.totals
     print("-" * len(header))
-    print(
-        f"{'TOTAL':<20}{t.fetched:>9}{t.kept:>7}{t.dropped:>9}{t.persisted:>11}{'':>11}"
-    )
+    print(f"{'TOTAL':<20}{total.fetched:>9}{total.kept:>7}{total.dropped:>9}{total.persisted:>11}{'':>11}")
 
 
 def main() -> None:
-    """CLI entrypoint: run a collection and print the per-source summary."""
-    logging.basicConfig(
-        level=logging.INFO, format="%(levelname)s %(name)s: %(message)s"
-    )
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
     print_summary(collect())
 
 

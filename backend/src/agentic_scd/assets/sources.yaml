@@ -1,0 +1,48 @@
+# Source registry — enabled connectors, their config, reliability priors, and
+# offline fallback snapshots. Toggle sources here by config, not code (set
+# `enabled: false`). Loaded by ingestion/registry.py. See specs/data-ingestion.md.
+
+sources:
+  - name: supplychain_rss
+    type: RSS
+    enabled: true
+    reliability: 0.7
+    config:
+      # Supply-chain feeds + query-scoped Google News (Stage 0 source targeting).
+      feeds:
+        - https://www.supplychaindive.com/feeds/news/
+      queries:
+        - port strike
+        - factory shutdown
+        - shipping delay
+        - port congestion
+        - tariff
+    fallback_path: data/fallback/rss_supplychain.xml
+
+  - name: open_meteo
+    type: WEATHER
+    enabled: true
+    reliability: 0.9
+    config:
+      # Major hubs/ports to watch for severe weather disruption.
+      hubs:
+        - hub_port: Port of Shanghai
+          region: China
+          lat: 31.23
+          lon: 121.47
+        - hub_port: Port of Rotterdam
+          region: Netherlands
+          lat: 51.95
+          lon: 4.14
+        - hub_port: Port of Los Angeles
+          region: USA
+          lat: 33.74
+          lon: -118.27
+    fallback_path: data/fallback/open_meteo_hubs.json
+
+  - name: synthetic
+    type: SYNTHETIC
+    enabled: true
+    reliability: 0.5
+    config:
+      count: 3

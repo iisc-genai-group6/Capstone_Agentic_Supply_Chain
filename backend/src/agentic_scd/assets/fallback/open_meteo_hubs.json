@@ -1,0 +1,50 @@
+[
+  {
+    "hub": {
+      "hub_port": "Port of Shanghai",
+      "region": "China",
+      "lat": 31.23,
+      "lon": 121.47
+    },
+    "response": {
+      "daily": {
+        "time": ["2026-06-10"],
+        "weather_code": [99],
+        "wind_speed_10m_max": [82.4],
+        "precipitation_sum": [61.2]
+      }
+    }
+  },
+  {
+    "hub": {
+      "hub_port": "Port of Rotterdam",
+      "region": "Netherlands",
+      "lat": 51.95,
+      "lon": 4.14
+    },
+    "response": {
+      "daily": {
+        "time": ["2026-06-10"],
+        "weather_code": [3],
+        "wind_speed_10m_max": [18.1],
+        "precipitation_sum": [0.0]
+      }
+    }
+  },
+  {
+    "hub": {
+      "hub_port": "Port of Los Angeles",
+      "region": "USA",
+      "lat": 33.74,
+      "lon": -118.27
+    },
+    "response": {
+      "daily": {
+        "time": ["2026-06-10"],
+        "weather_code": [65],
+        "wind_speed_10m_max": [44.6],
+        "precipitation_sum": [38.9]
+      }
+    }
+  }
+]

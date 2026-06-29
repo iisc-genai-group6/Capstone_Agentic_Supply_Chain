@@ -1,37 +1,19 @@
-"""Thin Postgres connectivity seam.
+from __future__ import annotations
 
-Phase 0.5 is infra only — there are no tables, schema, or migrations yet. This
-module just proves the local ``uv`` app can reach the Compose-managed Postgres
-over ``settings.database_url``. Following the same offline-runnable contract as
-``llm/client.py``, it degrades **gracefully**: when no DB is configured or the
-server is unreachable, ``ping`` returns a clear failure status instead of
-raising an unhandled error.
-"""
-
+import sqlite3
 from dataclasses import dataclass
-
-import psycopg
+from pathlib import Path
+from urllib.parse import unquote, urlparse
 
 from agentic_scd.config import Settings, get_settings
 
-# Bound connection attempts so an unreachable DB fails fast instead of hanging on a
-# dropped SYN (keeps ping() and the DB-skip tests prompt). libpq clamps this to >= 2s.
-CONNECT_TIMEOUT_SECONDS = 5
-
 
 class DatabaseNotConfiguredError(RuntimeError):
-    """Raised by ``connect`` when no ``database_url`` is configured."""
+    pass
 
 
 @dataclass(frozen=True)
 class PingResult:
-    """Outcome of a connectivity check.
-
-    ``ok`` is True only when a connection opened and ``SELECT 1`` returned. The
-    human-readable ``detail`` explains why a check failed (no config / server
-    down) so callers and demos get a clear message without crashing.
-    """
-
     ok: bool
     detail: str
 
@@ -39,52 +21,37 @@ class PingResult:
         return self.ok
 
 
-def connect(
-    settings: Settings | None = None, *, connect_timeout: int = CONNECT_TIMEOUT_SECONDS
-) -> psycopg.Connection:
-    """Open a new Postgres connection from ``settings.database_url``.
+def sqlite_path(database_url: str) -> Path:
+    if database_url.startswith("sqlite:///"):
+        return Path(unquote(database_url.replace("sqlite:///", "", 1))).expanduser()
+    if database_url.startswith("sqlite://"):
+        parsed = urlparse(database_url)
+        return Path(unquote(parsed.path)).expanduser()
+    raise DatabaseNotConfiguredError(
+        "The packaged runtime uses SQLite. Set DATABASE_URL=sqlite:////path/to/file.db."
+    )
 
-    A bounded ``connect_timeout`` keeps the offline contract real: when no server is
-    listening, some networks drop the SYN and the OS retransmits for ~20s before
-    giving up. The timeout makes an unreachable DB fail fast (raising
-    ``OperationalError``) so ``ping`` and the DB-skip tests degrade promptly instead
-    of hanging.
 
-    Raises:
-        DatabaseNotConfiguredError: if no ``database_url`` is configured.
-        psycopg.OperationalError: if the server cannot be reached.
-    """
+def connect(settings: Settings | None = None) -> sqlite3.Connection:
     settings = settings or get_settings()
-    if not settings.database_url:
-        raise DatabaseNotConfiguredError(
-            "No DATABASE_URL configured (set DATABASE_URL or the POSTGRES_* "
-            "vars in .env); see .env.example."
-        )
-    return psycopg.connect(settings.database_url, connect_timeout=connect_timeout)
+    url = settings.resolved_database_url
+    if not url:
+        raise DatabaseNotConfiguredError("No database URL configured")
+    path = sqlite_path(url)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    conn = sqlite3.connect(path, detect_types=sqlite3.PARSE_DECLTYPES)
+    conn.row_factory = sqlite3.Row
+    conn.execute("PRAGMA journal_mode=WAL")
+    conn.execute("PRAGMA foreign_keys=ON")
+    return conn
 
 
 def ping(settings: Settings | None = None) -> PingResult:
-    """Check connectivity by running ``SELECT 1``.
-
-    Never raises for the expected offline cases (no config, server down): those
-    return ``PingResult(ok=False, ...)`` so the app stays offline-runnable.
-    """
-    settings = settings or get_settings()
-    if not settings.database_url:
-        return PingResult(
-            ok=False,
-            detail="database not configured (no DATABASE_URL / POSTGRES_* set)",
-        )
-
     try:
-        with connect(settings) as conn, conn.cursor() as cur:
-            cur.execute("SELECT 1")
-            row = cur.fetchone()
-    except psycopg.OperationalError as exc:
-        # Server unreachable / auth failure — expected when the DB is not up.
-        message = str(exc).strip().splitlines()[0] if str(exc).strip() else repr(exc)
-        return PingResult(ok=False, detail=f"database unreachable: {message}")
-
-    if row == (1,):
+        with connect(settings) as conn:
+            row = conn.execute("SELECT 1").fetchone()
+    except Exception as exc:
+        return PingResult(ok=False, detail=str(exc))
+    if row and row[0] == 1:
         return PingResult(ok=True, detail="SELECT 1 ok")
-    return PingResult(ok=False, detail=f"unexpected result from SELECT 1: {row!r}")
+    return PingResult(ok=False, detail="unexpected database response")

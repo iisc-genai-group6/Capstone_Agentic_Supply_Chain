@@ -1,18 +1,24 @@
-# agentic-scd — backend
+# agentic-scd backend
 
-The Python service for the **Agentic Supply Chain Disruption Predictor & Simulation
-Engine**: the LangGraph pipeline, ingestion layer, agents, FastAPI/Gradio surfaces, and
-the dev notebooks.
+The backend contains the importable `agentic_scd` package used by the CLI, Gradio dashboard, FastAPI service, ingestion service, MCP tools, and evaluation harness.
 
-This directory is the Python project (`pyproject.toml` lives here). Run `uv` commands
-from **here** (`cd backend`); run `docker compose` from the **repo root** (one level up),
-where `docker-compose.yml` and `.env` live.
+Most users should install from the repository root:
 
 ```bash
-uv sync --group notebooks     # install deps (incl. Jupyter)
-uv run agentic-scd            # run the end-to-end pipeline
-uv run pytest                 # tests
+python -m pip install -e .
+agentic-scd-dashboard
 ```
 
-See the **repo-root `README.md`** for the full quick start (Docker and uv paths),
-architecture, and per-phase documentation.
+Backend-only development also works:
+
+```bash
+cd backend
+python -m pip install -e .
+agentic-scd --scenario "Typhoon approaching Shanghai Port"
+```
+
+The package stores runtime data in `~/.agentic_scd` unless `AGENTIC_SCD_HOME` is set.
+
+## Troubleshooting
+
+Some Gradio and Starlette combinations emit a repeated `HTTP_422_UNPROCESSABLE_ENTITY` deprecation warning while the UI queue is active. The application filters that known dependency warning at startup. Reinstall the package and restart `agentic-scd-dashboard` if an older editable install is still running.

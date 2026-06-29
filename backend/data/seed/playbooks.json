@@ -1,0 +1,79 @@
+[
+  {
+    "category": "weather",
+    "title": "Port severe weather playbook",
+    "action": "Hold new bookings at the exposed port, move critical SKUs to alternate sailings, and pre-clear customs at the receiving DC.",
+    "best_for": [
+      "port closure",
+      "storm",
+      "flooding"
+    ],
+    "expected_effect": "Cuts delay exposure by 20-35 percent for urgent SKUs."
+  },
+  {
+    "category": "labor_strike",
+    "title": "Labor disruption playbook",
+    "action": "Reroute high-margin SKUs through the nearest non-strike port and reserve spot capacity with the secondary carrier.",
+    "best_for": [
+      "strike",
+      "walkout",
+      "union action"
+    ],
+    "expected_effect": "Reduces stockout probability when the disruption lasts longer than five days."
+  },
+  {
+    "category": "logistics",
+    "title": "Congestion and freight spike playbook",
+    "action": "Split shipments across two lanes, expedite the top revenue SKUs, and defer low-margin replenishment until rates normalize.",
+    "best_for": [
+      "port congestion",
+      "freight spike",
+      "shipping delay"
+    ],
+    "expected_effect": "Protects service level while limiting emergency freight spend."
+  },
+  {
+    "category": "geopolitical",
+    "title": "Trade-policy shock playbook",
+    "action": "Check tariff exposure, move purchase orders to qualified exempt suppliers, and reserve inventory for contracted customers first.",
+    "best_for": [
+      "tariff",
+      "sanction",
+      "embargo"
+    ],
+    "expected_effect": "Contains margin loss and keeps customer-critical orders moving."
+  },
+  {
+    "category": "raw_material",
+    "title": "Input shortage playbook",
+    "action": "Lock remaining raw material allocation, approve substitute ingredients, and run demand shaping for low-priority SKUs.",
+    "best_for": [
+      "shortage",
+      "supplier failure",
+      "recall"
+    ],
+    "expected_effect": "Preserves production continuity for strategic products."
+  },
+  {
+    "category": "demand_shock",
+    "title": "Demand spike playbook",
+    "action": "Raise near-term safety stock, increase pack-out shifts, and prioritize channels with the highest contribution margin.",
+    "best_for": [
+      "demand spike",
+      "promotion",
+      "panic buying"
+    ],
+    "expected_effect": "Improves fill rate during a sudden demand surge."
+  },
+  {
+    "category": "quality",
+    "title": "Supplier quality failure playbook",
+    "action": "Quarantine affected lots, switch open orders to the alternate supplier, and increase inbound inspection sampling for the next three receipts.",
+    "best_for": [
+      "defect",
+      "inspection failure",
+      "quality hold"
+    ],
+    "expected_effect": "Avoids downstream recalls and protects customer shipments."
+  }
+]

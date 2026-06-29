@@ -1,0 +1,136 @@
+{
+  "suppliers": [
+    {
+      "name": "Supplier A",
+      "region": "China",
+      "products": [
+        "cosmetics",
+        "skincare"
+      ],
+      "reliability": 0.74,
+      "alt_supplier": "Supplier C",
+      "primary_lane": "Shanghai-Los Angeles"
+    },
+    {
+      "name": "Supplier B",
+      "region": "India",
+      "products": [
+        "haircare",
+        "wellness"
+      ],
+      "reliability": 0.81,
+      "alt_supplier": "Supplier D",
+      "primary_lane": "Mumbai-Rotterdam"
+    },
+    {
+      "name": "Supplier C",
+      "region": "Vietnam",
+      "products": [
+        "cosmetics",
+        "fragrance"
+      ],
+      "reliability": 0.86,
+      "alt_supplier": "Supplier A",
+      "primary_lane": "Ho Chi Minh-Los Angeles"
+    },
+    {
+      "name": "Supplier D",
+      "region": "Netherlands",
+      "products": [
+        "skincare",
+        "wellness"
+      ],
+      "reliability": 0.88,
+      "alt_supplier": "Supplier B",
+      "primary_lane": "Rotterdam-New York"
+    },
+    {
+      "name": "Supplier E",
+      "region": "USA",
+      "products": [
+        "fragrance",
+        "haircare"
+      ],
+      "reliability": 0.79,
+      "alt_supplier": "Supplier D",
+      "primary_lane": "Los Angeles-Dallas"
+    }
+  ],
+  "facilities": [
+    {
+      "name": "Shanghai Port Consolidation Hub",
+      "region": "China",
+      "type": "port",
+      "lanes": [
+        "Shanghai-Los Angeles",
+        "Shanghai-Rotterdam"
+      ]
+    },
+    {
+      "name": "Rotterdam DC",
+      "region": "Netherlands",
+      "type": "warehouse",
+      "lanes": [
+        "Mumbai-Rotterdam",
+        "Rotterdam-New York"
+      ]
+    },
+    {
+      "name": "Los Angeles Import DC",
+      "region": "USA",
+      "type": "warehouse",
+      "lanes": [
+        "Shanghai-Los Angeles",
+        "Ho Chi Minh-Los Angeles",
+        "Los Angeles-Dallas"
+      ]
+    },
+    {
+      "name": "Bangalore Blending Plant",
+      "region": "India",
+      "type": "plant",
+      "lanes": [
+        "Mumbai-Rotterdam",
+        "Mumbai-Dubai"
+      ]
+    }
+  ],
+  "lanes": [
+    {
+      "name": "Shanghai-Los Angeles",
+      "mode": "Sea",
+      "days": 17,
+      "cost_index": 1.0
+    },
+    {
+      "name": "Ho Chi Minh-Los Angeles",
+      "mode": "Sea",
+      "days": 19,
+      "cost_index": 0.94
+    },
+    {
+      "name": "Mumbai-Rotterdam",
+      "mode": "Sea",
+      "days": 21,
+      "cost_index": 0.88
+    },
+    {
+      "name": "Rotterdam-New York",
+      "mode": "Sea",
+      "days": 13,
+      "cost_index": 0.91
+    },
+    {
+      "name": "Los Angeles-Dallas",
+      "mode": "Road",
+      "days": 4,
+      "cost_index": 0.67
+    },
+    {
+      "name": "Mumbai-Dubai",
+      "mode": "Air",
+      "days": 2,
+      "cost_index": 1.8
+    }
+  ]
+}

@@ -1,0 +1,300 @@
+{"description": "Storm Closes Port in region 0. Analysts expect service-level pressure and mitigation review.", "region": "Region 0", "severity": 1, "label": "weather"}
+{"description": "Flooding Blocks Roads in region 1. Analysts expect service-level pressure and mitigation review.", "region": "Region 1", "severity": 4, "label": "weather"}
+{"description": "Typhoon Disrupts Factory in region 2. Analysts expect service-level pressure and mitigation review.", "region": "Region 2", "severity": 7, "label": "weather"}
+{"description": "Gale Force Winds Delay Shipping in region 3. Analysts expect service-level pressure and mitigation review.", "region": "Region 3", "severity": 10, "label": "weather"}
+{"description": "Storm Closes Port in region 4. Analysts expect service-level pressure and mitigation review.", "region": "Region 4", "severity": 3, "label": "weather"}
+{"description": "Flooding Blocks Roads in region 5. Analysts expect service-level pressure and mitigation review.", "region": "Region 5", "severity": 6, "label": "weather"}
+{"description": "Typhoon Disrupts Factory in region 6. Analysts expect service-level pressure and mitigation review.", "region": "Region 6", "severity": 9, "label": "weather"}
+{"description": "Gale Force Winds Delay Shipping in region 7. Analysts expect service-level pressure and mitigation review.", "region": "Region 7", "severity": 2, "label": "weather"}
+{"description": "Storm Closes Port in region 8. Analysts expect service-level pressure and mitigation review.", "region": "Region 8", "severity": 5, "label": "weather"}
+{"description": "Flooding Blocks Roads in region 0. Analysts expect service-level pressure and mitigation review.", "region": "Region 0", "severity": 8, "label": "weather"}
+{"description": "Typhoon Disrupts Factory in region 1. Analysts expect service-level pressure and mitigation review.", "region": "Region 1", "severity": 1, "label": "weather"}
+{"description": "Gale Force Winds Delay Shipping in region 2. Analysts expect service-level pressure and mitigation review.", "region": "Region 2", "severity": 4, "label": "weather"}
+{"description": "Storm Closes Port in region 3. Analysts expect service-level pressure and mitigation review.", "region": "Region 3", "severity": 7, "label": "weather"}
+{"description": "Flooding Blocks Roads in region 4. Analysts expect service-level pressure and mitigation review.", "region": "Region 4", "severity": 10, "label": "weather"}
+{"description": "Typhoon Disrupts Factory in region 5. Analysts expect service-level pressure and mitigation review.", "region": "Region 5", "severity": 3, "label": "weather"}
+{"description": "Gale Force Winds Delay Shipping in region 6. Analysts expect service-level pressure and mitigation review.", "region": "Region 6", "severity": 6, "label": "weather"}
+{"description": "Storm Closes Port in region 7. Analysts expect service-level pressure and mitigation review.", "region": "Region 7", "severity": 9, "label": "weather"}
+{"description": "Flooding Blocks Roads in region 8. Analysts expect service-level pressure and mitigation review.", "region": "Region 8", "severity": 2, "label": "weather"}
+{"description": "Typhoon Disrupts Factory in region 0. Analysts expect service-level pressure and mitigation review.", "region": "Region 0", "severity": 5, "label": "weather"}
+{"description": "Gale Force Winds Delay Shipping in region 1. Analysts expect service-level pressure and mitigation review.", "region": "Region 1", "severity": 8, "label": "weather"}
+{"description": "Storm Closes Port in region 2. Analysts expect service-level pressure and mitigation review.", "region": "Region 2", "severity": 1, "label": "weather"}
+{"description": "Flooding Blocks Roads in region 3. Analysts expect service-level pressure and mitigation review.", "region": "Region 3", "severity": 4, "label": "weather"}
+{"description": "Typhoon Disrupts Factory in region 4. Analysts expect service-level pressure and mitigation review.", "region": "Region 4", "severity": 7, "label": "weather"}
+{"description": "Gale Force Winds Delay Shipping in region 5. Analysts expect service-level pressure and mitigation review.", "region": "Region 5", "severity": 10, "label": "weather"}
+{"description": "Storm Closes Port in region 6. Analysts expect service-level pressure and mitigation review.", "region": "Region 6", "severity": 3, "label": "weather"}
+{"description": "Flooding Blocks Roads in region 7. Analysts expect service-level pressure and mitigation review.", "region": "Region 7", "severity": 6, "label": "weather"}
+{"description": "Typhoon Disrupts Factory in region 8. Analysts expect service-level pressure and mitigation review.", "region": "Region 8", "severity": 9, "label": "weather"}
+{"description": "Gale Force Winds Delay Shipping in region 0. Analysts expect service-level pressure and mitigation review.", "region": "Region 0", "severity": 2, "label": "weather"}
+{"description": "Storm Closes Port in region 1. Analysts expect service-level pressure and mitigation review.", "region": "Region 1", "severity": 5, "label": "weather"}
+{"description": "Flooding Blocks Roads in region 2. Analysts expect service-level pressure and mitigation review.", "region": "Region 2", "severity": 8, "label": "weather"}
+{"description": "Typhoon Disrupts Factory in region 3. Analysts expect service-level pressure and mitigation review.", "region": "Region 3", "severity": 1, "label": "weather"}
+{"description": "Gale Force Winds Delay Shipping in region 4. Analysts expect service-level pressure and mitigation review.", "region": "Region 4", "severity": 4, "label": "weather"}
+{"description": "Storm Closes Port in region 5. Analysts expect service-level pressure and mitigation review.", "region": "Region 5", "severity": 7, "label": "weather"}
+{"description": "Flooding Blocks Roads in region 6. Analysts expect service-level pressure and mitigation review.", "region": "Region 6", "severity": 10, "label": "weather"}
+{"description": "Typhoon Disrupts Factory in region 7. Analysts expect service-level pressure and mitigation review.", "region": "Region 7", "severity": 3, "label": "weather"}
+{"description": "Gale Force Winds Delay Shipping in region 8. Analysts expect service-level pressure and mitigation review.", "region": "Region 8", "severity": 6, "label": "weather"}
+{"description": "Storm Closes Port in region 0. Analysts expect service-level pressure and mitigation review.", "region": "Region 0", "severity": 9, "label": "weather"}
+{"description": "Flooding Blocks Roads in region 1. Analysts expect service-level pressure and mitigation review.", "region": "Region 1", "severity": 2, "label": "weather"}
+{"description": "Typhoon Disrupts Factory in region 2. Analysts expect service-level pressure and mitigation review.", "region": "Region 2", "severity": 5, "label": "weather"}
+{"description": "Gale Force Winds Delay Shipping in region 3. Analysts expect service-level pressure and mitigation review.", "region": "Region 3", "severity": 8, "label": "weather"}
+{"description": "Storm Closes Port in region 4. Analysts expect service-level pressure and mitigation review.", "region": "Region 4", "severity": 1, "label": "weather"}
+{"description": "Flooding Blocks Roads in region 5. Analysts expect service-level pressure and mitigation review.", "region": "Region 5", "severity": 4, "label": "weather"}
+{"description": "Typhoon Disrupts Factory in region 6. Analysts expect service-level pressure and mitigation review.", "region": "Region 6", "severity": 7, "label": "weather"}
+{"description": "Gale Force Winds Delay Shipping in region 7. Analysts expect service-level pressure and mitigation review.", "region": "Region 7", "severity": 10, "label": "weather"}
+{"description": "Storm Closes Port in region 8. Analysts expect service-level pressure and mitigation review.", "region": "Region 8", "severity": 3, "label": "weather"}
+{"description": "Flooding Blocks Roads in region 0. Analysts expect service-level pressure and mitigation review.", "region": "Region 0", "severity": 6, "label": "weather"}
+{"description": "Typhoon Disrupts Factory in region 1. Analysts expect service-level pressure and mitigation review.", "region": "Region 1", "severity": 9, "label": "weather"}
+{"description": "Gale Force Winds Delay Shipping in region 2. Analysts expect service-level pressure and mitigation review.", "region": "Region 2", "severity": 2, "label": "weather"}
+{"description": "Storm Closes Port in region 3. Analysts expect service-level pressure and mitigation review.", "region": "Region 3", "severity": 5, "label": "weather"}
+{"description": "Flooding Blocks Roads in region 4. Analysts expect service-level pressure and mitigation review.", "region": "Region 4", "severity": 8, "label": "weather"}
+{"description": "Tariff Raises Landed Cost in region 0. Analysts expect service-level pressure and mitigation review.", "region": "Region 0", "severity": 1, "label": "geopolitical"}
+{"description": "Sanction Blocks Supplier in region 1. Analysts expect service-level pressure and mitigation review.", "region": "Region 1", "severity": 4, "label": "geopolitical"}
+{"description": "Embargo Delays Customs in region 2. Analysts expect service-level pressure and mitigation review.", "region": "Region 2", "severity": 7, "label": "geopolitical"}
+{"description": "Border Tension Slows Freight in region 3. Analysts expect service-level pressure and mitigation review.", "region": "Region 3", "severity": 10, "label": "geopolitical"}
+{"description": "Tariff Raises Landed Cost in region 4. Analysts expect service-level pressure and mitigation review.", "region": "Region 4", "severity": 3, "label": "geopolitical"}
+{"description": "Sanction Blocks Supplier in region 5. Analysts expect service-level pressure and mitigation review.", "region": "Region 5", "severity": 6, "label": "geopolitical"}
+{"description": "Embargo Delays Customs in region 6. Analysts expect service-level pressure and mitigation review.", "region": "Region 6", "severity": 9, "label": "geopolitical"}
+{"description": "Border Tension Slows Freight in region 7. Analysts expect service-level pressure and mitigation review.", "region": "Region 7", "severity": 2, "label": "geopolitical"}
+{"description": "Tariff Raises Landed Cost in region 8. Analysts expect service-level pressure and mitigation review.", "region": "Region 8", "severity": 5, "label": "geopolitical"}
+{"description": "Sanction Blocks Supplier in region 0. Analysts expect service-level pressure and mitigation review.", "region": "Region 0", "severity": 8, "label": "geopolitical"}
+{"description": "Embargo Delays Customs in region 1. Analysts expect service-level pressure and mitigation review.", "region": "Region 1", "severity": 1, "label": "geopolitical"}
+{"description": "Border Tension Slows Freight in region 2. Analysts expect service-level pressure and mitigation review.", "region": "Region 2", "severity": 4, "label": "geopolitical"}
+{"description": "Tariff Raises Landed Cost in region 3. Analysts expect service-level pressure and mitigation review.", "region": "Region 3", "severity": 7, "label": "geopolitical"}
+{"description": "Sanction Blocks Supplier in region 4. Analysts expect service-level pressure and mitigation review.", "region": "Region 4", "severity": 10, "label": "geopolitical"}
+{"description": "Embargo Delays Customs in region 5. Analysts expect service-level pressure and mitigation review.", "region": "Region 5", "severity": 3, "label": "geopolitical"}
+{"description": "Border Tension Slows Freight in region 6. Analysts expect service-level pressure and mitigation review.", "region": "Region 6", "severity": 6, "label": "geopolitical"}
+{"description": "Tariff Raises Landed Cost in region 7. Analysts expect service-level pressure and mitigation review.", "region": "Region 7", "severity": 9, "label": "geopolitical"}
+{"description": "Sanction Blocks Supplier in region 8. Analysts expect service-level pressure and mitigation review.", "region": "Region 8", "severity": 2, "label": "geopolitical"}
+{"description": "Embargo Delays Customs in region 0. Analysts expect service-level pressure and mitigation review.", "region": "Region 0", "severity": 5, "label": "geopolitical"}
+{"description": "Border Tension Slows Freight in region 1. Analysts expect service-level pressure and mitigation review.", "region": "Region 1", "severity": 8, "label": "geopolitical"}
+{"description": "Tariff Raises Landed Cost in region 2. Analysts expect service-level pressure and mitigation review.", "region": "Region 2", "severity": 1, "label": "geopolitical"}
+{"description": "Sanction Blocks Supplier in region 3. Analysts expect service-level pressure and mitigation review.", "region": "Region 3", "severity": 4, "label": "geopolitical"}
+{"description": "Embargo Delays Customs in region 4. Analysts expect service-level pressure and mitigation review.", "region": "Region 4", "severity": 7, "label": "geopolitical"}
+{"description": "Border Tension Slows Freight in region 5. Analysts expect service-level pressure and mitigation review.", "region": "Region 5", "severity": 10, "label": "geopolitical"}
+{"description": "Tariff Raises Landed Cost in region 6. Analysts expect service-level pressure and mitigation review.", "region": "Region 6", "severity": 3, "label": "geopolitical"}
+{"description": "Sanction Blocks Supplier in region 7. Analysts expect service-level pressure and mitigation review.", "region": "Region 7", "severity": 6, "label": "geopolitical"}
+{"description": "Embargo Delays Customs in region 8. Analysts expect service-level pressure and mitigation review.", "region": "Region 8", "severity": 9, "label": "geopolitical"}
+{"description": "Border Tension Slows Freight in region 0. Analysts expect service-level pressure and mitigation review.", "region": "Region 0", "severity": 2, "label": "geopolitical"}
+{"description": "Tariff Raises Landed Cost in region 1. Analysts expect service-level pressure and mitigation review.", "region": "Region 1", "severity": 5, "label": "geopolitical"}
+{"description": "Sanction Blocks Supplier in region 2. Analysts expect service-level pressure and mitigation review.", "region": "Region 2", "severity": 8, "label": "geopolitical"}
+{"description": "Embargo Delays Customs in region 3. Analysts expect service-level pressure and mitigation review.", "region": "Region 3", "severity": 1, "label": "geopolitical"}
+{"description": "Border Tension Slows Freight in region 4. Analysts expect service-level pressure and mitigation review.", "region": "Region 4", "severity": 4, "label": "geopolitical"}
+{"description": "Tariff Raises Landed Cost in region 5. Analysts expect service-level pressure and mitigation review.", "region": "Region 5", "severity": 7, "label": "geopolitical"}
+{"description": "Sanction Blocks Supplier in region 6. Analysts expect service-level pressure and mitigation review.", "region": "Region 6", "severity": 10, "label": "geopolitical"}
+{"description": "Embargo Delays Customs in region 7. Analysts expect service-level pressure and mitigation review.", "region": "Region 7", "severity": 3, "label": "geopolitical"}
+{"description": "Border Tension Slows Freight in region 8. Analysts expect service-level pressure and mitigation review.", "region": "Region 8", "severity": 6, "label": "geopolitical"}
+{"description": "Tariff Raises Landed Cost in region 0. Analysts expect service-level pressure and mitigation review.", "region": "Region 0", "severity": 9, "label": "geopolitical"}
+{"description": "Sanction Blocks Supplier in region 1. Analysts expect service-level pressure and mitigation review.", "region": "Region 1", "severity": 2, "label": "geopolitical"}
+{"description": "Embargo Delays Customs in region 2. Analysts expect service-level pressure and mitigation review.", "region": "Region 2", "severity": 5, "label": "geopolitical"}
+{"description": "Border Tension Slows Freight in region 3. Analysts expect service-level pressure and mitigation review.", "region": "Region 3", "severity": 8, "label": "geopolitical"}
+{"description": "Tariff Raises Landed Cost in region 4. Analysts expect service-level pressure and mitigation review.", "region": "Region 4", "severity": 1, "label": "geopolitical"}
+{"description": "Sanction Blocks Supplier in region 5. Analysts expect service-level pressure and mitigation review.", "region": "Region 5", "severity": 4, "label": "geopolitical"}
+{"description": "Embargo Delays Customs in region 6. Analysts expect service-level pressure and mitigation review.", "region": "Region 6", "severity": 7, "label": "geopolitical"}
+{"description": "Border Tension Slows Freight in region 7. Analysts expect service-level pressure and mitigation review.", "region": "Region 7", "severity": 10, "label": "geopolitical"}
+{"description": "Tariff Raises Landed Cost in region 8. Analysts expect service-level pressure and mitigation review.", "region": "Region 8", "severity": 3, "label": "geopolitical"}
+{"description": "Sanction Blocks Supplier in region 0. Analysts expect service-level pressure and mitigation review.", "region": "Region 0", "severity": 6, "label": "geopolitical"}
+{"description": "Embargo Delays Customs in region 1. Analysts expect service-level pressure and mitigation review.", "region": "Region 1", "severity": 9, "label": "geopolitical"}
+{"description": "Border Tension Slows Freight in region 2. Analysts expect service-level pressure and mitigation review.", "region": "Region 2", "severity": 2, "label": "geopolitical"}
+{"description": "Tariff Raises Landed Cost in region 3. Analysts expect service-level pressure and mitigation review.", "region": "Region 3", "severity": 5, "label": "geopolitical"}
+{"description": "Sanction Blocks Supplier in region 4. Analysts expect service-level pressure and mitigation review.", "region": "Region 4", "severity": 8, "label": "geopolitical"}
+{"description": "Port Congestion Creates Backlog in region 0. Analysts expect service-level pressure and mitigation review.", "region": "Region 0", "severity": 1, "label": "logistics"}
+{"description": "Freight Rate Surge Delays Orders in region 1. Analysts expect service-level pressure and mitigation review.", "region": "Region 1", "severity": 4, "label": "logistics"}
+{"description": "Container Shortage Hits Lane in region 2. Analysts expect service-level pressure and mitigation review.", "region": "Region 2", "severity": 7, "label": "logistics"}
+{"description": "Carrier Rollover Delays Cargo in region 3. Analysts expect service-level pressure and mitigation review.", "region": "Region 3", "severity": 10, "label": "logistics"}
+{"description": "Port Congestion Creates Backlog in region 4. Analysts expect service-level pressure and mitigation review.", "region": "Region 4", "severity": 3, "label": "logistics"}
+{"description": "Freight Rate Surge Delays Orders in region 5. Analysts expect service-level pressure and mitigation review.", "region": "Region 5", "severity": 6, "label": "logistics"}
+{"description": "Container Shortage Hits Lane in region 6. Analysts expect service-level pressure and mitigation review.", "region": "Region 6", "severity": 9, "label": "logistics"}
+{"description": "Carrier Rollover Delays Cargo in region 7. Analysts expect service-level pressure and mitigation review.", "region": "Region 7", "severity": 2, "label": "logistics"}
+{"description": "Port Congestion Creates Backlog in region 8. Analysts expect service-level pressure and mitigation review.", "region": "Region 8", "severity": 5, "label": "logistics"}
+{"description": "Freight Rate Surge Delays Orders in region 0. Analysts expect service-level pressure and mitigation review.", "region": "Region 0", "severity": 8, "label": "logistics"}
+{"description": "Container Shortage Hits Lane in region 1. Analysts expect service-level pressure and mitigation review.", "region": "Region 1", "severity": 1, "label": "logistics"}
+{"description": "Carrier Rollover Delays Cargo in region 2. Analysts expect service-level pressure and mitigation review.", "region": "Region 2", "severity": 4, "label": "logistics"}
+{"description": "Port Congestion Creates Backlog in region 3. Analysts expect service-level pressure and mitigation review.", "region": "Region 3", "severity": 7, "label": "logistics"}
+{"description": "Freight Rate Surge Delays Orders in region 4. Analysts expect service-level pressure and mitigation review.", "region": "Region 4", "severity": 10, "label": "logistics"}
+{"description": "Container Shortage Hits Lane in region 5. Analysts expect service-level pressure and mitigation review.", "region": "Region 5", "severity": 3, "label": "logistics"}
+{"description": "Carrier Rollover Delays Cargo in region 6. Analysts expect service-level pressure and mitigation review.", "region": "Region 6", "severity": 6, "label": "logistics"}
+{"description": "Port Congestion Creates Backlog in region 7. Analysts expect service-level pressure and mitigation review.", "region": "Region 7", "severity": 9, "label": "logistics"}
+{"description": "Freight Rate Surge Delays Orders in region 8. Analysts expect service-level pressure and mitigation review.", "region": "Region 8", "severity": 2, "label": "logistics"}
+{"description": "Container Shortage Hits Lane in region 0. Analysts expect service-level pressure and mitigation review.", "region": "Region 0", "severity": 5, "label": "logistics"}
+{"description": "Carrier Rollover Delays Cargo in region 1. Analysts expect service-level pressure and mitigation review.", "region": "Region 1", "severity": 8, "label": "logistics"}
+{"description": "Port Congestion Creates Backlog in region 2. Analysts expect service-level pressure and mitigation review.", "region": "Region 2", "severity": 1, "label": "logistics"}
+{"description": "Freight Rate Surge Delays Orders in region 3. Analysts expect service-level pressure and mitigation review.", "region": "Region 3", "severity": 4, "label": "logistics"}
+{"description": "Container Shortage Hits Lane in region 4. Analysts expect service-level pressure and mitigation review.", "region": "Region 4", "severity": 7, "label": "logistics"}
+{"description": "Carrier Rollover Delays Cargo in region 5. Analysts expect service-level pressure and mitigation review.", "region": "Region 5", "severity": 10, "label": "logistics"}
+{"description": "Port Congestion Creates Backlog in region 6. Analysts expect service-level pressure and mitigation review.", "region": "Region 6", "severity": 3, "label": "logistics"}
+{"description": "Freight Rate Surge Delays Orders in region 7. Analysts expect service-level pressure and mitigation review.", "region": "Region 7", "severity": 6, "label": "logistics"}
+{"description": "Container Shortage Hits Lane in region 8. Analysts expect service-level pressure and mitigation review.", "region": "Region 8", "severity": 9, "label": "logistics"}
+{"description": "Carrier Rollover Delays Cargo in region 0. Analysts expect service-level pressure and mitigation review.", "region": "Region 0", "severity": 2, "label": "logistics"}
+{"description": "Port Congestion Creates Backlog in region 1. Analysts expect service-level pressure and mitigation review.", "region": "Region 1", "severity": 5, "label": "logistics"}
+{"description": "Freight Rate Surge Delays Orders in region 2. Analysts expect service-level pressure and mitigation review.", "region": "Region 2", "severity": 8, "label": "logistics"}
+{"description": "Container Shortage Hits Lane in region 3. Analysts expect service-level pressure and mitigation review.", "region": "Region 3", "severity": 1, "label": "logistics"}
+{"description": "Carrier Rollover Delays Cargo in region 4. Analysts expect service-level pressure and mitigation review.", "region": "Region 4", "severity": 4, "label": "logistics"}
+{"description": "Port Congestion Creates Backlog in region 5. Analysts expect service-level pressure and mitigation review.", "region": "Region 5", "severity": 7, "label": "logistics"}
+{"description": "Freight Rate Surge Delays Orders in region 6. Analysts expect service-level pressure and mitigation review.", "region": "Region 6", "severity": 10, "label": "logistics"}
+{"description": "Container Shortage Hits Lane in region 7. Analysts expect service-level pressure and mitigation review.", "region": "Region 7", "severity": 3, "label": "logistics"}
+{"description": "Carrier Rollover Delays Cargo in region 8. Analysts expect service-level pressure and mitigation review.", "region": "Region 8", "severity": 6, "label": "logistics"}
+{"description": "Port Congestion Creates Backlog in region 0. Analysts expect service-level pressure and mitigation review.", "region": "Region 0", "severity": 9, "label": "logistics"}
+{"description": "Freight Rate Surge Delays Orders in region 1. Analysts expect service-level pressure and mitigation review.", "region": "Region 1", "severity": 2, "label": "logistics"}
+{"description": "Container Shortage Hits Lane in region 2. Analysts expect service-level pressure and mitigation review.", "region": "Region 2", "severity": 5, "label": "logistics"}
+{"description": "Carrier Rollover Delays Cargo in region 3. Analysts expect service-level pressure and mitigation review.", "region": "Region 3", "severity": 8, "label": "logistics"}
+{"description": "Port Congestion Creates Backlog in region 4. Analysts expect service-level pressure and mitigation review.", "region": "Region 4", "severity": 1, "label": "logistics"}
+{"description": "Freight Rate Surge Delays Orders in region 5. Analysts expect service-level pressure and mitigation review.", "region": "Region 5", "severity": 4, "label": "logistics"}
+{"description": "Container Shortage Hits Lane in region 6. Analysts expect service-level pressure and mitigation review.", "region": "Region 6", "severity": 7, "label": "logistics"}
+{"description": "Carrier Rollover Delays Cargo in region 7. Analysts expect service-level pressure and mitigation review.", "region": "Region 7", "severity": 10, "label": "logistics"}
+{"description": "Port Congestion Creates Backlog in region 8. Analysts expect service-level pressure and mitigation review.", "region": "Region 8", "severity": 3, "label": "logistics"}
+{"description": "Freight Rate Surge Delays Orders in region 0. Analysts expect service-level pressure and mitigation review.", "region": "Region 0", "severity": 6, "label": "logistics"}
+{"description": "Container Shortage Hits Lane in region 1. Analysts expect service-level pressure and mitigation review.", "region": "Region 1", "severity": 9, "label": "logistics"}
+{"description": "Carrier Rollover Delays Cargo in region 2. Analysts expect service-level pressure and mitigation review.", "region": "Region 2", "severity": 2, "label": "logistics"}
+{"description": "Port Congestion Creates Backlog in region 3. Analysts expect service-level pressure and mitigation review.", "region": "Region 3", "severity": 5, "label": "logistics"}
+{"description": "Freight Rate Surge Delays Orders in region 4. Analysts expect service-level pressure and mitigation review.", "region": "Region 4", "severity": 8, "label": "logistics"}
+{"description": "Ingredient Shortage Slows Production in region 0. Analysts expect service-level pressure and mitigation review.", "region": "Region 0", "severity": 1, "label": "raw_material"}
+{"description": "Supplier Outage Affects Component in region 1. Analysts expect service-level pressure and mitigation review.", "region": "Region 1", "severity": 4, "label": "raw_material"}
+{"description": "Recall Reduces Available Stock in region 2. Analysts expect service-level pressure and mitigation review.", "region": "Region 2", "severity": 7, "label": "raw_material"}
+{"description": "Factory Shutdown Cuts Capacity in region 3. Analysts expect service-level pressure and mitigation review.", "region": "Region 3", "severity": 10, "label": "raw_material"}
+{"description": "Ingredient Shortage Slows Production in region 4. Analysts expect service-level pressure and mitigation review.", "region": "Region 4", "severity": 3, "label": "raw_material"}
+{"description": "Supplier Outage Affects Component in region 5. Analysts expect service-level pressure and mitigation review.", "region": "Region 5", "severity": 6, "label": "raw_material"}
+{"description": "Recall Reduces Available Stock in region 6. Analysts expect service-level pressure and mitigation review.", "region": "Region 6", "severity": 9, "label": "raw_material"}
+{"description": "Factory Shutdown Cuts Capacity in region 7. Analysts expect service-level pressure and mitigation review.", "region": "Region 7", "severity": 2, "label": "raw_material"}
+{"description": "Ingredient Shortage Slows Production in region 8. Analysts expect service-level pressure and mitigation review.", "region": "Region 8", "severity": 5, "label": "raw_material"}
+{"description": "Supplier Outage Affects Component in region 0. Analysts expect service-level pressure and mitigation review.", "region": "Region 0", "severity": 8, "label": "raw_material"}
+{"description": "Recall Reduces Available Stock in region 1. Analysts expect service-level pressure and mitigation review.", "region": "Region 1", "severity": 1, "label": "raw_material"}
+{"description": "Factory Shutdown Cuts Capacity in region 2. Analysts expect service-level pressure and mitigation review.", "region": "Region 2", "severity": 4, "label": "raw_material"}
+{"description": "Ingredient Shortage Slows Production in region 3. Analysts expect service-level pressure and mitigation review.", "region": "Region 3", "severity": 7, "label": "raw_material"}
+{"description": "Supplier Outage Affects Component in region 4. Analysts expect service-level pressure and mitigation review.", "region": "Region 4", "severity": 10, "label": "raw_material"}
+{"description": "Recall Reduces Available Stock in region 5. Analysts expect service-level pressure and mitigation review.", "region": "Region 5", "severity": 3, "label": "raw_material"}
+{"description": "Factory Shutdown Cuts Capacity in region 6. Analysts expect service-level pressure and mitigation review.", "region": "Region 6", "severity": 6, "label": "raw_material"}
+{"description": "Ingredient Shortage Slows Production in region 7. Analysts expect service-level pressure and mitigation review.", "region": "Region 7", "severity": 9, "label": "raw_material"}
+{"description": "Supplier Outage Affects Component in region 8. Analysts expect service-level pressure and mitigation review.", "region": "Region 8", "severity": 2, "label": "raw_material"}
+{"description": "Recall Reduces Available Stock in region 0. Analysts expect service-level pressure and mitigation review.", "region": "Region 0", "severity": 5, "label": "raw_material"}
+{"description": "Factory Shutdown Cuts Capacity in region 1. Analysts expect service-level pressure and mitigation review.", "region": "Region 1", "severity": 8, "label": "raw_material"}
+{"description": "Ingredient Shortage Slows Production in region 2. Analysts expect service-level pressure and mitigation review.", "region": "Region 2", "severity": 1, "label": "raw_material"}
+{"description": "Supplier Outage Affects Component in region 3. Analysts expect service-level pressure and mitigation review.", "region": "Region 3", "severity": 4, "label": "raw_material"}
+{"description": "Recall Reduces Available Stock in region 4. Analysts expect service-level pressure and mitigation review.", "region": "Region 4", "severity": 7, "label": "raw_material"}
+{"description": "Factory Shutdown Cuts Capacity in region 5. Analysts expect service-level pressure and mitigation review.", "region": "Region 5", "severity": 10, "label": "raw_material"}
+{"description": "Ingredient Shortage Slows Production in region 6. Analysts expect service-level pressure and mitigation review.", "region": "Region 6", "severity": 3, "label": "raw_material"}
+{"description": "Supplier Outage Affects Component in region 7. Analysts expect service-level pressure and mitigation review.", "region": "Region 7", "severity": 6, "label": "raw_material"}
+{"description": "Recall Reduces Available Stock in region 8. Analysts expect service-level pressure and mitigation review.", "region": "Region 8", "severity": 9, "label": "raw_material"}
+{"description": "Factory Shutdown Cuts Capacity in region 0. Analysts expect service-level pressure and mitigation review.", "region": "Region 0", "severity": 2, "label": "raw_material"}
+{"description": "Ingredient Shortage Slows Production in region 1. Analysts expect service-level pressure and mitigation review.", "region": "Region 1", "severity": 5, "label": "raw_material"}
+{"description": "Supplier Outage Affects Component in region 2. Analysts expect service-level pressure and mitigation review.", "region": "Region 2", "severity": 8, "label": "raw_material"}
+{"description": "Recall Reduces Available Stock in region 3. Analysts expect service-level pressure and mitigation review.", "region": "Region 3", "severity": 1, "label": "raw_material"}
+{"description": "Factory Shutdown Cuts Capacity in region 4. Analysts expect service-level pressure and mitigation review.", "region": "Region 4", "severity": 4, "label": "raw_material"}
+{"description": "Ingredient Shortage Slows Production in region 5. Analysts expect service-level pressure and mitigation review.", "region": "Region 5", "severity": 7, "label": "raw_material"}
+{"description": "Supplier Outage Affects Component in region 6. Analysts expect service-level pressure and mitigation review.", "region": "Region 6", "severity": 10, "label": "raw_material"}
+{"description": "Recall Reduces Available Stock in region 7. Analysts expect service-level pressure and mitigation review.", "region": "Region 7", "severity": 3, "label": "raw_material"}
+{"description": "Factory Shutdown Cuts Capacity in region 8. Analysts expect service-level pressure and mitigation review.", "region": "Region 8", "severity": 6, "label": "raw_material"}
+{"description": "Ingredient Shortage Slows Production in region 0. Analysts expect service-level pressure and mitigation review.", "region": "Region 0", "severity": 9, "label": "raw_material"}
+{"description": "Supplier Outage Affects Component in region 1. Analysts expect service-level pressure and mitigation review.", "region": "Region 1", "severity": 2, "label": "raw_material"}
+{"description": "Recall Reduces Available Stock in region 2. Analysts expect service-level pressure and mitigation review.", "region": "Region 2", "severity": 5, "label": "raw_material"}
+{"description": "Factory Shutdown Cuts Capacity in region 3. Analysts expect service-level pressure and mitigation review.", "region": "Region 3", "severity": 8, "label": "raw_material"}
+{"description": "Ingredient Shortage Slows Production in region 4. Analysts expect service-level pressure and mitigation review.", "region": "Region 4", "severity": 1, "label": "raw_material"}
+{"description": "Supplier Outage Affects Component in region 5. Analysts expect service-level pressure and mitigation review.", "region": "Region 5", "severity": 4, "label": "raw_material"}
+{"description": "Recall Reduces Available Stock in region 6. Analysts expect service-level pressure and mitigation review.", "region": "Region 6", "severity": 7, "label": "raw_material"}
+{"description": "Factory Shutdown Cuts Capacity in region 7. Analysts expect service-level pressure and mitigation review.", "region": "Region 7", "severity": 10, "label": "raw_material"}
+{"description": "Ingredient Shortage Slows Production in region 8. Analysts expect service-level pressure and mitigation review.", "region": "Region 8", "severity": 3, "label": "raw_material"}
+{"description": "Supplier Outage Affects Component in region 0. Analysts expect service-level pressure and mitigation review.", "region": "Region 0", "severity": 6, "label": "raw_material"}
+{"description": "Recall Reduces Available Stock in region 1. Analysts expect service-level pressure and mitigation review.", "region": "Region 1", "severity": 9, "label": "raw_material"}
+{"description": "Factory Shutdown Cuts Capacity in region 2. Analysts expect service-level pressure and mitigation review.", "region": "Region 2", "severity": 2, "label": "raw_material"}
+{"description": "Ingredient Shortage Slows Production in region 3. Analysts expect service-level pressure and mitigation review.", "region": "Region 3", "severity": 5, "label": "raw_material"}
+{"description": "Supplier Outage Affects Component in region 4. Analysts expect service-level pressure and mitigation review.", "region": "Region 4", "severity": 8, "label": "raw_material"}
+{"description": "Unexpected Promotion Lifts Demand in region 0. Analysts expect service-level pressure and mitigation review.", "region": "Region 0", "severity": 1, "label": "demand_shock"}
+{"description": "Panic Buying Drains Inventory in region 1. Analysts expect service-level pressure and mitigation review.", "region": "Region 1", "severity": 4, "label": "demand_shock"}
+{"description": "Forecast Error Creates Spike in region 2. Analysts expect service-level pressure and mitigation review.", "region": "Region 2", "severity": 7, "label": "demand_shock"}
+{"description": "Retailer Order Surge Strains Stock in region 3. Analysts expect service-level pressure and mitigation review.", "region": "Region 3", "severity": 10, "label": "demand_shock"}
+{"description": "Unexpected Promotion Lifts Demand in region 4. Analysts expect service-level pressure and mitigation review.", "region": "Region 4", "severity": 3, "label": "demand_shock"}
+{"description": "Panic Buying Drains Inventory in region 5. Analysts expect service-level pressure and mitigation review.", "region": "Region 5", "severity": 6, "label": "demand_shock"}
+{"description": "Forecast Error Creates Spike in region 6. Analysts expect service-level pressure and mitigation review.", "region": "Region 6", "severity": 9, "label": "demand_shock"}
+{"description": "Retailer Order Surge Strains Stock in region 7. Analysts expect service-level pressure and mitigation review.", "region": "Region 7", "severity": 2, "label": "demand_shock"}
+{"description": "Unexpected Promotion Lifts Demand in region 8. Analysts expect service-level pressure and mitigation review.", "region": "Region 8", "severity": 5, "label": "demand_shock"}
+{"description": "Panic Buying Drains Inventory in region 0. Analysts expect service-level pressure and mitigation review.", "region": "Region 0", "severity": 8, "label": "demand_shock"}
+{"description": "Forecast Error Creates Spike in region 1. Analysts expect service-level pressure and mitigation review.", "region": "Region 1", "severity": 1, "label": "demand_shock"}
+{"description": "Retailer Order Surge Strains Stock in region 2. Analysts expect service-level pressure and mitigation review.", "region": "Region 2", "severity": 4, "label": "demand_shock"}
+{"description": "Unexpected Promotion Lifts Demand in region 3. Analysts expect service-level pressure and mitigation review.", "region": "Region 3", "severity": 7, "label": "demand_shock"}
+{"description": "Panic Buying Drains Inventory in region 4. Analysts expect service-level pressure and mitigation review.", "region": "Region 4", "severity": 10, "label": "demand_shock"}
+{"description": "Forecast Error Creates Spike in region 5. Analysts expect service-level pressure and mitigation review.", "region": "Region 5", "severity": 3, "label": "demand_shock"}
+{"description": "Retailer Order Surge Strains Stock in region 6. Analysts expect service-level pressure and mitigation review.", "region": "Region 6", "severity": 6, "label": "demand_shock"}
+{"description": "Unexpected Promotion Lifts Demand in region 7. Analysts expect service-level pressure and mitigation review.", "region": "Region 7", "severity": 9, "label": "demand_shock"}
+{"description": "Panic Buying Drains Inventory in region 8. Analysts expect service-level pressure and mitigation review.", "region": "Region 8", "severity": 2, "label": "demand_shock"}
+{"description": "Forecast Error Creates Spike in region 0. Analysts expect service-level pressure and mitigation review.", "region": "Region 0", "severity": 5, "label": "demand_shock"}
+{"description": "Retailer Order Surge Strains Stock in region 1. Analysts expect service-level pressure and mitigation review.", "region": "Region 1", "severity": 8, "label": "demand_shock"}
+{"description": "Unexpected Promotion Lifts Demand in region 2. Analysts expect service-level pressure and mitigation review.", "region": "Region 2", "severity": 1, "label": "demand_shock"}
+{"description": "Panic Buying Drains Inventory in region 3. Analysts expect service-level pressure and mitigation review.", "region": "Region 3", "severity": 4, "label": "demand_shock"}
+{"description": "Forecast Error Creates Spike in region 4. Analysts expect service-level pressure and mitigation review.", "region": "Region 4", "severity": 7, "label": "demand_shock"}
+{"description": "Retailer Order Surge Strains Stock in region 5. Analysts expect service-level pressure and mitigation review.", "region": "Region 5", "severity": 10, "label": "demand_shock"}
+{"description": "Unexpected Promotion Lifts Demand in region 6. Analysts expect service-level pressure and mitigation review.", "region": "Region 6", "severity": 3, "label": "demand_shock"}
+{"description": "Panic Buying Drains Inventory in region 7. Analysts expect service-level pressure and mitigation review.", "region": "Region 7", "severity": 6, "label": "demand_shock"}
+{"description": "Forecast Error Creates Spike in region 8. Analysts expect service-level pressure and mitigation review.", "region": "Region 8", "severity": 9, "label": "demand_shock"}
+{"description": "Retailer Order Surge Strains Stock in region 0. Analysts expect service-level pressure and mitigation review.", "region": "Region 0", "severity": 2, "label": "demand_shock"}
+{"description": "Unexpected Promotion Lifts Demand in region 1. Analysts expect service-level pressure and mitigation review.", "region": "Region 1", "severity": 5, "label": "demand_shock"}
+{"description": "Panic Buying Drains Inventory in region 2. Analysts expect service-level pressure and mitigation review.", "region": "Region 2", "severity": 8, "label": "demand_shock"}
+{"description": "Forecast Error Creates Spike in region 3. Analysts expect service-level pressure and mitigation review.", "region": "Region 3", "severity": 1, "label": "demand_shock"}
+{"description": "Retailer Order Surge Strains Stock in region 4. Analysts expect service-level pressure and mitigation review.", "region": "Region 4", "severity": 4, "label": "demand_shock"}
+{"description": "Unexpected Promotion Lifts Demand in region 5. Analysts expect service-level pressure and mitigation review.", "region": "Region 5", "severity": 7, "label": "demand_shock"}
+{"description": "Panic Buying Drains Inventory in region 6. Analysts expect service-level pressure and mitigation review.", "region": "Region 6", "severity": 10, "label": "demand_shock"}
+{"description": "Forecast Error Creates Spike in region 7. Analysts expect service-level pressure and mitigation review.", "region": "Region 7", "severity": 3, "label": "demand_shock"}
+{"description": "Retailer Order Surge Strains Stock in region 8. Analysts expect service-level pressure and mitigation review.", "region": "Region 8", "severity": 6, "label": "demand_shock"}
+{"description": "Unexpected Promotion Lifts Demand in region 0. Analysts expect service-level pressure and mitigation review.", "region": "Region 0", "severity": 9, "label": "demand_shock"}
+{"description": "Panic Buying Drains Inventory in region 1. Analysts expect service-level pressure and mitigation review.", "region": "Region 1", "severity": 2, "label": "demand_shock"}
+{"description": "Forecast Error Creates Spike in region 2. Analysts expect service-level pressure and mitigation review.", "region": "Region 2", "severity": 5, "label": "demand_shock"}
+{"description": "Retailer Order Surge Strains Stock in region 3. Analysts expect service-level pressure and mitigation review.", "region": "Region 3", "severity": 8, "label": "demand_shock"}
+{"description": "Unexpected Promotion Lifts Demand in region 4. Analysts expect service-level pressure and mitigation review.", "region": "Region 4", "severity": 1, "label": "demand_shock"}
+{"description": "Panic Buying Drains Inventory in region 5. Analysts expect service-level pressure and mitigation review.", "region": "Region 5", "severity": 4, "label": "demand_shock"}
+{"description": "Forecast Error Creates Spike in region 6. Analysts expect service-level pressure and mitigation review.", "region": "Region 6", "severity": 7, "label": "demand_shock"}
+{"description": "Retailer Order Surge Strains Stock in region 7. Analysts expect service-level pressure and mitigation review.", "region": "Region 7", "severity": 10, "label": "demand_shock"}
+{"description": "Unexpected Promotion Lifts Demand in region 8. Analysts expect service-level pressure and mitigation review.", "region": "Region 8", "severity": 3, "label": "demand_shock"}
+{"description": "Panic Buying Drains Inventory in region 0. Analysts expect service-level pressure and mitigation review.", "region": "Region 0", "severity": 6, "label": "demand_shock"}
+{"description": "Forecast Error Creates Spike in region 1. Analysts expect service-level pressure and mitigation review.", "region": "Region 1", "severity": 9, "label": "demand_shock"}
+{"description": "Retailer Order Surge Strains Stock in region 2. Analysts expect service-level pressure and mitigation review.", "region": "Region 2", "severity": 2, "label": "demand_shock"}
+{"description": "Unexpected Promotion Lifts Demand in region 3. Analysts expect service-level pressure and mitigation review.", "region": "Region 3", "severity": 5, "label": "demand_shock"}
+{"description": "Panic Buying Drains Inventory in region 4. Analysts expect service-level pressure and mitigation review.", "region": "Region 4", "severity": 8, "label": "demand_shock"}
+{"description": "Union Strike Stops Port in region 0. Analysts expect service-level pressure and mitigation review.", "region": "Region 0", "severity": 1, "label": "labor_strike"}
+{"description": "Warehouse Walkout Delays Picking in region 1. Analysts expect service-level pressure and mitigation review.", "region": "Region 1", "severity": 4, "label": "labor_strike"}
+{"description": "Driver Strike Blocks Deliveries in region 2. Analysts expect service-level pressure and mitigation review.", "region": "Region 2", "severity": 7, "label": "labor_strike"}
+{"description": "Factory Labor Stoppage Cuts Output in region 3. Analysts expect service-level pressure and mitigation review.", "region": "Region 3", "severity": 10, "label": "labor_strike"}
+{"description": "Union Strike Stops Port in region 4. Analysts expect service-level pressure and mitigation review.", "region": "Region 4", "severity": 3, "label": "labor_strike"}
+{"description": "Warehouse Walkout Delays Picking in region 5. Analysts expect service-level pressure and mitigation review.", "region": "Region 5", "severity": 6, "label": "labor_strike"}
+{"description": "Driver Strike Blocks Deliveries in region 6. Analysts expect service-level pressure and mitigation review.", "region": "Region 6", "severity": 9, "label": "labor_strike"}
+{"description": "Factory Labor Stoppage Cuts Output in region 7. Analysts expect service-level pressure and mitigation review.", "region": "Region 7", "severity": 2, "label": "labor_strike"}
+{"description": "Union Strike Stops Port in region 8. Analysts expect service-level pressure and mitigation review.", "region": "Region 8", "severity": 5, "label": "labor_strike"}
+{"description": "Warehouse Walkout Delays Picking in region 0. Analysts expect service-level pressure and mitigation review.", "region": "Region 0", "severity": 8, "label": "labor_strike"}
+{"description": "Driver Strike Blocks Deliveries in region 1. Analysts expect service-level pressure and mitigation review.", "region": "Region 1", "severity": 1, "label": "labor_strike"}
+{"description": "Factory Labor Stoppage Cuts Output in region 2. Analysts expect service-level pressure and mitigation review.", "region": "Region 2", "severity": 4, "label": "labor_strike"}
+{"description": "Union Strike Stops Port in region 3. Analysts expect service-level pressure and mitigation review.", "region": "Region 3", "severity": 7, "label": "labor_strike"}
+{"description": "Warehouse Walkout Delays Picking in region 4. Analysts expect service-level pressure and mitigation review.", "region": "Region 4", "severity": 10, "label": "labor_strike"}
+{"description": "Driver Strike Blocks Deliveries in region 5. Analysts expect service-level pressure and mitigation review.", "region": "Region 5", "severity": 3, "label": "labor_strike"}
+{"description": "Factory Labor Stoppage Cuts Output in region 6. Analysts expect service-level pressure and mitigation review.", "region": "Region 6", "severity": 6, "label": "labor_strike"}
+{"description": "Union Strike Stops Port in region 7. Analysts expect service-level pressure and mitigation review.", "region": "Region 7", "severity": 9, "label": "labor_strike"}
+{"description": "Warehouse Walkout Delays Picking in region 8. Analysts expect service-level pressure and mitigation review.", "region": "Region 8", "severity": 2, "label": "labor_strike"}
+{"description": "Driver Strike Blocks Deliveries in region 0. Analysts expect service-level pressure and mitigation review.", "region": "Region 0", "severity": 5, "label": "labor_strike"}
+{"description": "Factory Labor Stoppage Cuts Output in region 1. Analysts expect service-level pressure and mitigation review.", "region": "Region 1", "severity": 8, "label": "labor_strike"}
+{"description": "Union Strike Stops Port in region 2. Analysts expect service-level pressure and mitigation review.", "region": "Region 2", "severity": 1, "label": "labor_strike"}
+{"description": "Warehouse Walkout Delays Picking in region 3. Analysts expect service-level pressure and mitigation review.", "region": "Region 3", "severity": 4, "label": "labor_strike"}
+{"description": "Driver Strike Blocks Deliveries in region 4. Analysts expect service-level pressure and mitigation review.", "region": "Region 4", "severity": 7, "label": "labor_strike"}
+{"description": "Factory Labor Stoppage Cuts Output in region 5. Analysts expect service-level pressure and mitigation review.", "region": "Region 5", "severity": 10, "label": "labor_strike"}
+{"description": "Union Strike Stops Port in region 6. Analysts expect service-level pressure and mitigation review.", "region": "Region 6", "severity": 3, "label": "labor_strike"}
+{"description": "Warehouse Walkout Delays Picking in region 7. Analysts expect service-level pressure and mitigation review.", "region": "Region 7", "severity": 6, "label": "labor_strike"}
+{"description": "Driver Strike Blocks Deliveries in region 8. Analysts expect service-level pressure and mitigation review.", "region": "Region 8", "severity": 9, "label": "labor_strike"}
+{"description": "Factory Labor Stoppage Cuts Output in region 0. Analysts expect service-level pressure and mitigation review.", "region": "Region 0", "severity": 2, "label": "labor_strike"}
+{"description": "Union Strike Stops Port in region 1. Analysts expect service-level pressure and mitigation review.", "region": "Region 1", "severity": 5, "label": "labor_strike"}
+{"description": "Warehouse Walkout Delays Picking in region 2. Analysts expect service-level pressure and mitigation review.", "region": "Region 2", "severity": 8, "label": "labor_strike"}
+{"description": "Driver Strike Blocks Deliveries in region 3. Analysts expect service-level pressure and mitigation review.", "region": "Region 3", "severity": 1, "label": "labor_strike"}
+{"description": "Factory Labor Stoppage Cuts Output in region 4. Analysts expect service-level pressure and mitigation review.", "region": "Region 4", "severity": 4, "label": "labor_strike"}
+{"description": "Union Strike Stops Port in region 5. Analysts expect service-level pressure and mitigation review.", "region": "Region 5", "severity": 7, "label": "labor_strike"}
+{"description": "Warehouse Walkout Delays Picking in region 6. Analysts expect service-level pressure and mitigation review.", "region": "Region 6", "severity": 10, "label": "labor_strike"}
+{"description": "Driver Strike Blocks Deliveries in region 7. Analysts expect service-level pressure and mitigation review.", "region": "Region 7", "severity": 3, "label": "labor_strike"}
+{"description": "Factory Labor Stoppage Cuts Output in region 8. Analysts expect service-level pressure and mitigation review.", "region": "Region 8", "severity": 6, "label": "labor_strike"}
+{"description": "Union Strike Stops Port in region 0. Analysts expect service-level pressure and mitigation review.", "region": "Region 0", "severity": 9, "label": "labor_strike"}
+{"description": "Warehouse Walkout Delays Picking in region 1. Analysts expect service-level pressure and mitigation review.", "region": "Region 1", "severity": 2, "label": "labor_strike"}
+{"description": "Driver Strike Blocks Deliveries in region 2. Analysts expect service-level pressure and mitigation review.", "region": "Region 2", "severity": 5, "label": "labor_strike"}
+{"description": "Factory Labor Stoppage Cuts Output in region 3. Analysts expect service-level pressure and mitigation review.", "region": "Region 3", "severity": 8, "label": "labor_strike"}
+{"description": "Union Strike Stops Port in region 4. Analysts expect service-level pressure and mitigation review.", "region": "Region 4", "severity": 1, "label": "labor_strike"}
+{"description": "Warehouse Walkout Delays Picking in region 5. Analysts expect service-level pressure and mitigation review.", "region": "Region 5", "severity": 4, "label": "labor_strike"}
+{"description": "Driver Strike Blocks Deliveries in region 6. Analysts expect service-level pressure and mitigation review.", "region": "Region 6", "severity": 7, "label": "labor_strike"}
+{"description": "Factory Labor Stoppage Cuts Output in region 7. Analysts expect service-level pressure and mitigation review.", "region": "Region 7", "severity": 10, "label": "labor_strike"}
+{"description": "Union Strike Stops Port in region 8. Analysts expect service-level pressure and mitigation review.", "region": "Region 8", "severity": 3, "label": "labor_strike"}
+{"description": "Warehouse Walkout Delays Picking in region 0. Analysts expect service-level pressure and mitigation review.", "region": "Region 0", "severity": 6, "label": "labor_strike"}
+{"description": "Driver Strike Blocks Deliveries in region 1. Analysts expect service-level pressure and mitigation review.", "region": "Region 1", "severity": 9, "label": "labor_strike"}
+{"description": "Factory Labor Stoppage Cuts Output in region 2. Analysts expect service-level pressure and mitigation review.", "region": "Region 2", "severity": 2, "label": "labor_strike"}
+{"description": "Union Strike Stops Port in region 3. Analysts expect service-level pressure and mitigation review.", "region": "Region 3", "severity": 5, "label": "labor_strike"}
+{"description": "Warehouse Walkout Delays Picking in region 4. Analysts expect service-level pressure and mitigation review.", "region": "Region 4", "severity": 8, "label": "labor_strike"}

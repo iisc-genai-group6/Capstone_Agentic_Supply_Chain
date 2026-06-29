@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Typhoon approaching Shanghai Port",
+    "title": "Typhoon warning shuts down Shanghai port operations",
+    "body": "A severe typhoon is approaching Shanghai. Port authorities are suspending container handling and nearby suppliers expect at least six days of logistics disruption.",
+    "category": "weather",
+    "severity": 9.1,
+    "region": "China"
+  },
+  {
+    "name": "Supplier quality failure",
+    "title": "Supplier B reports inspection failure and high defect rates",
+    "body": "Supplier B failed final inspection for a high-volume skincare component. The defect rate is above ten percent and replacement batches may be delayed.",
+    "category": "quality",
+    "severity": 6.8,
+    "region": "India"
+  },
+  {
+    "name": "Packaging supplier labor strike",
+    "title": "Packaging supplier labor strike delays outbound replenishment",
+    "body": "A union strike at the packaging supplier has halted carton production and delayed finished goods replenishment for haircare products.",
+    "category": "labor_strike",
+    "severity": 7.4,
+    "region": "USA"
+  },
+  {
+    "name": "Freight price shock",
+    "title": "Trans-Pacific freight rates surge after port congestion",
+    "body": "Port congestion and vessel schedule disruption have lifted freight rates across the China to US West Coast lane.",
+    "category": "logistics",
+    "severity": 5.9,
+    "region": "Pacific"
+  },
+  {
+    "name": "Tariff policy change",
+    "title": "New tariff announced on imported cosmetic ingredients",
+    "body": "A new import tariff on cosmetic ingredients may increase landed cost and disrupt purchase orders from tariff-exposed suppliers.",
+    "category": "geopolitical",
+    "severity": 6.2,
+    "region": "North America"
+  }
+]
