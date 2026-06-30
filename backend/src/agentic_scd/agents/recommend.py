@@ -10,14 +10,18 @@ if TYPE_CHECKING:
 
 OWNER_BY_CATEGORY = {
     "weather": "Logistics lead",
+    "natural_disaster": "Logistics lead",
+    "labor": "Transportation manager",
     "labor_strike": "Transportation manager",
     "logistics": "Control tower analyst",
+    "policy": "Procurement lead",
     "geopolitical": "Procurement lead",
     "raw_material": "Sourcing manager",
     "demand_shock": "Demand planner",
     "quality": "Supplier quality engineer",
     "other": "Supply chain analyst",
 }
+PLAYBOOK_CATEGORY = {"labor": "labor_strike", "policy": "geopolitical", "natural_disaster": "weather"}
 
 
 def urgency(classification: Classification, simulation: Simulation) -> str:
@@ -35,18 +39,23 @@ def build_recommendation(classifications: list[Classification], impacts: list[Im
     max_by_category = {category: max((item for item in classifications if item.category == category), key=lambda item: item.severity, default=None) for category in categories}
     for category in categories:
         classification = max_by_category.get(category)
-        docs = mitigation_retriever().search(category, top_k=2, category=category)
+        search_category = PLAYBOOK_CATEGORY.get(category, category)
+        docs = mitigation_retriever().search(search_category, top_k=2, category=search_category)
         if not docs:
             docs = mitigation_retriever().search(category, top_k=2)
         if docs:
             chosen = docs[0]
             meta = chosen.metadata
             action = str(meta.get("action", "Review supplier exposure and raise safety stock."))
+            if category == "logistics" and "freight" not in action.lower():
+                action = f"{action} Use controlled emergency freight only for top SKUs."
             expected = str(meta.get("expected_effect", "Reduces disruption exposure."))
             evidence.append(f"{meta.get('title', chosen.doc_id)}: {expected}")
         else:
             action = "Review supplier exposure, reserve safety stock, and prepare an alternate route."
             expected = "Creates a controlled response while more data arrives."
+        if category == "logistics" and "freight" not in action.lower():
+            action = f"Use the freight mitigation playbook: {action}"
         level = urgency(classification, simulation) if classification else "medium"
         owner = OWNER_BY_CATEGORY.get(category, "Supply chain analyst")
         structured.append(MitigationAction(action=action, urgency=level, expected_impact=expected, owner=owner))

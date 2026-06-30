@@ -4,7 +4,7 @@ from datetime import datetime
 
 from pydantic import BaseModel, Field
 
-SCHEMA_VERSION = 3
+SCHEMA_VERSION = 2
 
 
 class Location(BaseModel):

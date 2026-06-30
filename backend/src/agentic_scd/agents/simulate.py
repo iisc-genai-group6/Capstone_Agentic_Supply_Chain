@@ -17,6 +17,8 @@ def run_simulation(classifications: list[Classification], impacts: list[ImpactMa
     n = iterations or settings.simulation_iterations
     risk = aggregate_risk(classifications)
     affected = sum(len(item.affected_entities) for item in impacts)
+    if risk <= 0 and affected <= 0:
+        return Simulation(stockout_probability=0.0, revenue_impact=0.0, recovery_time_days=0.0, service_level=1.0, expected_shortage_units=0.0, iterations=n, assumptions="No active risk or affected network nodes.")
     baseline_demand = float(np.mean(forecast.baseline)) if forecast and forecast.baseline else 900.0
     adjusted_demand = float(np.mean(forecast.adjusted)) if forecast and forecast.adjusted else baseline_demand * (1 - 0.18 * risk)
     rng = np.random.default_rng(42 + int(1000 * risk) + affected)

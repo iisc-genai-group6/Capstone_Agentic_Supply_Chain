@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from agentic_scd.ingestion.dedupe import assign_hash, is_duplicate
 from agentic_scd.ingestion.relevance import gate
 from agentic_scd.ingestion.schema import DisruptionSignal
+from agentic_scd.ingestion.sqlutil import commit
 from agentic_scd.ingestion.store import persist_signal, record_rejected
 
 
@@ -32,5 +33,5 @@ def ingest_signals(signals: list[DisruptionSignal], conn) -> IngestResult:
             result.persisted += 1
     for signal in dropped:
         record_rejected(conn, assign_hash(signal).dedup_hash or "")
-    conn.commit()
+    commit(conn)
     return result

@@ -73,7 +73,7 @@ class Settings:
 
     @property
     def resolved_database_url(self) -> str | None:
-        return self.database_url if self.database_url is not None else build_database_url(self.data_dir)
+        return self.database_url
 
     @property
     def llm_is_mock(self) -> bool:

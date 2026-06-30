@@ -17,3 +17,4 @@ class GraphState(TypedDict, total=False):
     route: str
     scenario_name: str
     run_id: str
+    use_pending_signals: bool

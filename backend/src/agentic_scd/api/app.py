@@ -26,7 +26,7 @@ class RunRequest(BaseModel):
 
 
 def create_app() -> FastAPI:
-    app = FastAPI(title="Agentic SCD API", version="1.0.1")
+    app = FastAPI(title="Agentic SCD API", version="1.0.2")
 
     @app.get("/health")
     def health() -> dict:
@@ -53,7 +53,7 @@ def create_app() -> FastAPI:
         signal = normalize(event.to_raw_item(), webhook_source())
         with connect() as conn:
             result = ingest_signals([signal], conn)
-        return {"kept": result.kept, "dropped": result.dropped, "persisted": result.persisted, "duplicate": result.duplicate}
+        return {"kept": result.kept, "dropped": result.dropped, "persisted": result.persisted, "duplicate": result.duplicate, "persisted_to_db": result.persisted > 0}
 
     @app.get("/signals")
     def list_signals(limit: int = 50) -> dict:

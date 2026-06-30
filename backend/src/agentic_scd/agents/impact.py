@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import UTC, datetime
 from typing import TYPE_CHECKING
 
 from agentic_scd.agents.schema import Classification, ImpactMap
@@ -11,13 +12,38 @@ if TYPE_CHECKING:
 
 CATEGORY_HINTS = {
     "weather": ["port", "warehouse", "Sea"],
+    "natural_disaster": ["Taiwan", "chip", "supplier"],
+    "labor": ["port", "warehouse"],
     "labor_strike": ["port", "warehouse"],
     "logistics": ["lane", "Sea", "port"],
+    "policy": ["supplier", "lane", "tariff"],
     "geopolitical": ["supplier", "lane"],
     "raw_material": ["supplier", "products"],
     "quality": ["supplier", "products"],
     "demand_shock": ["warehouse", "products"],
 }
+
+
+def default_impact(classification: Classification) -> ImpactMap:
+    category = classification.category
+    if category in {"natural_disaster", "weather"}:
+        suppliers = ["Taiwan chip supplier"] if category == "natural_disaster" else ["Supplier A"]
+        lanes = ["Taiwan-US West"] if category == "natural_disaster" else ["Shanghai-Los Angeles"]
+        facilities = ["Assembly Plant 3"] if category == "natural_disaster" else ["Los Angeles Import DC"]
+    elif category in {"logistics", "labor", "labor_strike"}:
+        suppliers = ["Supplier A"]
+        lanes = ["Shanghai-Los Angeles"]
+        facilities = ["Los Angeles Import DC"]
+    else:
+        suppliers = ["Supplier B"]
+        lanes = ["Mumbai-Rotterdam"]
+        facilities = ["Rotterdam DC"]
+    reasoning = f"Mapped {category} risk to {len(suppliers)} supplier(s), {len(lanes)} lane(s), and {len(facilities)} facility node(s)."
+    return ImpactMap(signal_id=classification.signal_id, affected_suppliers=suppliers, affected_lanes=lanes, affected_facilities=facilities, reasoning=reasoning)
+
+
+def fallback_signal(classification: Classification) -> DisruptionSignal:
+    return DisruptionSignal(signal_id=classification.signal_id, source="classification", source_type="SYNTHETIC", fetched_at=datetime.now(UTC), title=classification.category)
 
 
 def map_impact(signal: DisruptionSignal, classification: Classification) -> ImpactMap:
@@ -46,12 +72,13 @@ def map_impact(signal: DisruptionSignal, classification: Classification) -> Impa
             lanes.extend(str(item) for item in meta.get("lanes", []))
         elif kind == "lanes":
             lanes.append(name)
+    base = default_impact(classification)
     if not suppliers:
-        suppliers = ["Supplier A" if classification.category in {"weather", "logistics"} else "Supplier B"]
+        suppliers = base.affected_suppliers
     if not lanes:
-        lanes = ["Shanghai-Los Angeles" if classification.category in {"weather", "logistics"} else "Mumbai-Rotterdam"]
+        lanes = base.affected_lanes
     if not facilities:
-        facilities = ["Los Angeles Import DC"]
+        facilities = base.affected_facilities
     reasoning = f"Mapped {classification.category} risk to {len(suppliers)} supplier(s), {len(lanes)} lane(s), and {len(facilities)} facility node(s)."
     return ImpactMap(
         signal_id=signal.signal_id,
@@ -66,5 +93,10 @@ def map_impact(signal: DisruptionSignal, classification: Classification) -> Impa
 
 def impact_node(state: "GraphState") -> dict:
     signals = {signal.signal_id: signal for signal in state.get("new_signals", [])}
-    impacts = [map_impact(signals[item.signal_id], item) for item in state.get("classifications", []) if item.signal_id in signals and item.severity >= 3]
+    impacts = []
+    for item in state.get("classifications", []):
+        if item.severity < 3:
+            continue
+        signal = signals.get(item.signal_id)
+        impacts.append(map_impact(signal, item) if signal else default_impact(item))
     return {"impacts": impacts}

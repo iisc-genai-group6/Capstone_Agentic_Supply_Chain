@@ -68,6 +68,10 @@ def collect(settings: Settings | None = None) -> CollectSummary:
     return summary
 
 
+def collect_once(live: bool = False, settings: Settings | None = None) -> CollectSummary:
+    return collect(settings)
+
+
 def print_summary(summary: CollectSummary) -> None:
     where = "SQLite" if summary.db_persisted else "in-memory"
     print(f"Collection complete - persistence: {where}")

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 from contextlib import asynccontextmanager
+from dataclasses import dataclass
 
 import uvicorn
 from fastapi import FastAPI, Request
@@ -9,13 +10,22 @@ from fastapi import FastAPI, Request
 try:
     from apscheduler.schedulers.background import BackgroundScheduler
 except Exception:
+    @dataclass
+    class _Job:
+        id: str
+        max_instances: int
+        next_run_time: object | None = object()
+
     class BackgroundScheduler:
         def __init__(self) -> None:
             self.running = False
-            self.jobs = []
+            self.jobs = {}
 
-        def add_job(self, *args, **kwargs) -> None:
-            self.jobs.append((args, kwargs))
+        def add_job(self, func, trigger=None, minutes=None, args=None, id=None, max_instances=1, coalesce=True) -> None:
+            self.jobs[id] = _Job(id=id, max_instances=max_instances)
+
+        def get_job(self, job_id):
+            return self.jobs.get(job_id)
 
         def start(self) -> None:
             self.running = True
@@ -24,7 +34,7 @@ except Exception:
             self.running = False
 
 from agentic_scd.config import Settings, get_settings
-from agentic_scd.db import connect, init_db, ping
+from agentic_scd.db import DatabaseNotConfiguredError, connect, init_db, ping
 from agentic_scd.ingestion.collect import collect
 from agentic_scd.ingestion.normalize import normalize
 from agentic_scd.ingestion.pipeline import ingest_signals
@@ -80,9 +90,15 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     def post_signal(event: WebhookEvent, request: Request) -> dict:
         cfg: Settings = request.app.state.settings
         signal = normalize(event.to_raw_item(), webhook_source(cfg))
-        with connect(cfg) as conn:
-            result = ingest_signals([signal], conn)
-        return {"kept": result.kept, "dropped": result.dropped, "persisted": result.persisted, "duplicate": result.duplicate}
+        db_persisted = False
+        try:
+            init_db(cfg)
+            with connect(cfg) as conn:
+                result = ingest_signals([signal], conn)
+            db_persisted = True
+        except DatabaseNotConfiguredError:
+            result = ingest_signals([signal], None)
+        return {"kept": result.kept, "dropped": result.dropped, "persisted": result.persisted, "duplicate": result.duplicate, "persisted_to_db": db_persisted and result.persisted > 0}
 
     @app.post("/collect")
     def post_collect(request: Request) -> dict:

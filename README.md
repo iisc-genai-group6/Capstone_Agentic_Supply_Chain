@@ -222,6 +222,24 @@ curl http://127.0.0.1:8001/health
 curl -X POST http://127.0.0.1:8001/collect
 ```
 
+Send the built-in supplier webhook demo events to the ingestion service:
+
+```bash
+agentic-scd-send-event
+```
+
+Or send them to a custom URL:
+
+```bash
+agentic-scd-send-event http://127.0.0.1:8001
+```
+
+The same helper is still available for direct script-style use:
+
+```bash
+python scripts/send_synthetic_event.py http://127.0.0.1:8001
+```
+
 ## MCP external data tools
 
 Print the MCP tool manifest:
@@ -312,6 +330,28 @@ In the dashboard, run the same typhoon scenario, then switch to supplier quality
 
 The original architecture called for PostgreSQL, Chroma, Prophet, DistilBERT, and Groq. The code keeps those seams but makes the installed package reliable on a fresh machine by using SQLite, a local lexical classifier, a lightweight retrieval layer, a NumPy forecaster, and a Monte Carlo simulation by default. The optional `full` extra is where heavier integrations can be plugged in without changing the public commands.
 
+
+### Source-install build backend note
+
+This release uses the small local `build_backend.py` file to build the package from source. A clean `pyenv` or `venv` can now run `python -m pip install .` without needing setuptools inside pip's temporary build-isolation environment. If an older checkout fails with `Cannot import 'setuptools.build_meta'`, remove that older unpacked folder, unzip this release, and reinstall from the project root.
+
+## Test import hygiene
+
+The repository now protects both supported pytest entry points from an older installed `agentic-scd` copy in the active virtual environment. Run either command after reinstalling the package:
+
+```bash
+python3 -m pytest backend/tests
+cd backend && python3 -m pytest tests
+```
+
+For a direct import sanity check from the project root, run:
+
+```bash
+PYTHONPATH="$PWD/backend/src:$PWD/scripts:$PWD" python3 -c "import agentic_scd, pathlib; print(agentic_scd.__version__); print(pathlib.Path(agentic_scd.__file__).resolve())"
+```
+
+The version should be `1.0.5`, and the path should point into this checkout's `backend/src/agentic_scd` folder.
+
 ## Troubleshooting
 
 A few Gradio and Starlette releases print a repeated warning like this while the browser is polling the queue:
@@ -320,7 +360,7 @@ A few Gradio and Starlette releases print a repeated warning like this while the
 StarletteDeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated.
 ```
 
-It is a dependency warning, not a failed pipeline run. Version 1.0.1 suppresses that known warning inside the dashboard and API entry points, so reinstalling the package from this folder is enough:
+It is a dependency warning, not a failed pipeline run. Version 1.0.5 suppresses that known warning inside the dashboard and API entry points, so reinstalling the package from this folder is enough:
 
 ```bash
 python -m pip install -e .

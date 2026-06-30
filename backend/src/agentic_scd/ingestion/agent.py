@@ -4,6 +4,7 @@ import logging
 from typing import TYPE_CHECKING
 
 from agentic_scd.db import connect, init_db
+from agentic_scd.ingestion.sqlutil import commit, execute, placeholders
 from agentic_scd.ingestion.store import row_to_signal
 
 if TYPE_CHECKING:
@@ -11,22 +12,24 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-
 SELECT_NEW = "SELECT * FROM signals WHERE status = 'new' AND source_type NOT IN ('DATASET', 'FREIGHT_INDEX') ORDER BY created_at"
 
 
 def read_new_signals(conn) -> list:
-    rows = conn.execute(SELECT_NEW).fetchall()
+    rows = execute(conn, SELECT_NEW).fetchall()
     signals = [row_to_signal(row) for row in rows]
     if signals:
         ids = [signal.signal_id for signal in signals]
-        placeholders = ",".join("?" for _ in ids)
-        conn.execute(f"UPDATE signals SET status = 'processing' WHERE signal_id IN ({placeholders})", ids)
-        conn.commit()
+        style = "sqlite" if hasattr(conn, "execute") else "pyformat"
+        sql = f"UPDATE signals SET status = 'processing' WHERE signal_id IN ({placeholders(len(ids), style)})"
+        execute(conn, sql, tuple(ids))
+        commit(conn)
     return signals
 
 
 def ingestion_node(state: "GraphState") -> dict:
+    if state.get("scenario_name") and not state.get("use_pending_signals"):
+        return {"new_signals": []}
     try:
         init_db()
         with connect() as conn:

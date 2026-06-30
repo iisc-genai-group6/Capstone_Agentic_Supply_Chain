@@ -1,6 +1,6 @@
 [project]
 name = "agentic-scd"
-version = "1.0.1"
+version = "1.0.5"
 description = "Agentic Supply Chain Disruption Predictor and Simulation Engine"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -41,6 +41,7 @@ agentic-scd-evaluate = "agentic_scd.evaluation.metrics:main"
 agentic-scd-generate-data = "agentic_scd.data.generate:main"
 agentic-scd-ingest = "agentic_scd.ingestion.service:main"
 agentic-scd-mcp = "agentic_scd.mcp.server:main"
+agentic-scd-send-event = "agentic_scd.ingestion.synthetic_sender:main"
 
 [dependency-groups]
 dev = [
@@ -53,11 +54,19 @@ notebooks = [
 ]
 
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = []
+build-backend = "build_backend"
+backend-path = ["."]
 
-[tool.hatch.build.targets.wheel]
-packages = ["src/agentic_scd"]
+[tool.setuptools]
+package-dir = {"" = "src"}
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+agentic_scd = ["assets/*.yaml", "assets/fallback/*", "assets/seed/*", "db/*.sql"]
 
 [tool.ruff]
 target-version = "py311"
@@ -72,5 +81,6 @@ select = ["E", "F", "I", "UP", "B"]
 "**/__init__.py" = ["F401"]
 
 [tool.pytest.ini_options]
+pythonpath = ["src", "scripts", ".."]
 testpaths = ["tests"]
 addopts = "-q"

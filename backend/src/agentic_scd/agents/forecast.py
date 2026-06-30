@@ -19,8 +19,7 @@ HORIZON = 8
 def aggregate_risk(classifications: list[Classification]) -> float:
     if not classifications:
         return 0.0
-    weights = np.array([max(item.risk_score, 0.01) for item in classifications], dtype=float)
-    return float(np.average([item.risk_score for item in classifications], weights=weights))
+    return round(float(np.mean([item.risk_score for item in classifications])), 4)
 
 
 def baseline_from_dataset(path: Path | None = None) -> list[float]:
