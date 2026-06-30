@@ -1,20 +1,63 @@
+# Dev infrastructure: a local Postgres plus an idle `app` container (Python 3.11 + uv +
+# the project). `docker compose up` brings the infrastructure up but starts NO run mode;
+# you then exec the mode you want (CLI / Gradio / Jupyter). See the README "Quick start".
+# Values are read from the project-root `.env` (Compose loads it automatically).
+#
+#   docker compose up -d                 # build + start postgres and the idle app
+#   docker compose up -d postgres        # just the database (local `uv` workflow)
+#   docker compose exec app uv run agentic-scd            # CLI run
+#   docker compose exec app uv run agentic-scd-dashboard  # Gradio -> localhost:7860
+#   docker compose exec app uv run jupyter lab --ip 0.0.0.0  # Jupyter -> localhost:8888
+#   docker compose ps                    # services should report "healthy"/"running"
+#   docker compose down                  # stop; data persists on the pgdata volume
+#   docker compose down -v               # also drop the volume (wipes the data)
+
 services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: agentic_scd_postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
   app:
     build:
-      context: .
-      dockerfile: backend/Dockerfile
+      context: ./backend
+      dockerfile: Dockerfile
     image: agentic_scd_app
+    container_name: agentic_scd_app
+    depends_on:
+      postgres:
+        condition: service_healthy
     environment:
-      AGENTIC_SCD_HOME: /app/.agentic_scd
-      DATABASE_URL: sqlite:////app/.agentic_scd/agentic_scd.sqlite
+      # Inside the app container the DB is the `postgres` service, not localhost.
+      DATABASE_URL: postgresql://${POSTGRES_USER:-agentic}:${POSTGRES_PASSWORD:-agentic}@postgres:5432/${POSTGRES_DB:-agentic_scd}
       GROQ_API_KEY: ${GROQ_API_KEY:-}
       GROQ_MODEL: ${GROQ_MODEL:-openai/gpt-oss-120b}
-      USE_MOCK_LLM: ${USE_MOCK_LLM:-true}
+      USE_MOCK_LLM: ${USE_MOCK_LLM:-false}
+      # Bind Gradio to 0.0.0.0 so the published port is reachable from the host.
       GRADIO_SERVER_NAME: 0.0.0.0
     ports:
-      - "7860:7860"
-      - "8000:8000"
-      - "8001:8001"
+      - "7860:7860"   # Gradio dashboard
+      - "8888:8888"   # Jupyter
     volumes:
-      - ./.agentic_scd:/app/.agentic_scd
-    command: ["agentic-scd-dashboard"]
+      # Live edits: notebooks and source are bind-mounted; the in-image .venv is kept.
+      - ./backend/notebooks:/app/notebooks
+      - ./backend/src:/app/src
+    # Idle so the infra is "up" but no run mode is chosen for you (exec one in).
+    command: ["sleep", "infinity"]
+    restart: unless-stopped
+
+volumes:
+  pgdata:

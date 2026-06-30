@@ -3,7 +3,7 @@ from __future__ import annotations
 import hashlib
 
 from agentic_scd.ingestion.schema import DisruptionSignal
-from agentic_scd.ingestion.sqlutil import fetchone
+from agentic_scd.ingestion.sqlutil import dialect, fetchone
 
 
 def assign_hash(signal: DisruptionSignal) -> DisruptionSignal:
@@ -15,10 +15,8 @@ def assign_hash(signal: DisruptionSignal) -> DisruptionSignal:
 def is_duplicate(dedup_hash_value: str | None, conn) -> bool:
     if not dedup_hash_value or conn is None:
         return False
-    if hasattr(conn, "execute"):
+    if dialect(conn) == "sqlite":
         sql = "SELECT 1 FROM seen_rejected WHERE dedup_hash = ? UNION ALL SELECT 1 FROM signals WHERE dedup_hash = ? LIMIT 1"
-        params = (dedup_hash_value, dedup_hash_value)
     else:
         sql = "SELECT 1 FROM seen_rejected WHERE dedup_hash = %s UNION ALL SELECT 1 FROM signals WHERE dedup_hash = %s LIMIT 1"
-        params = (dedup_hash_value, dedup_hash_value)
-    return fetchone(conn, sql, params) is not None
+    return fetchone(conn, sql, (dedup_hash_value, dedup_hash_value)) is not None

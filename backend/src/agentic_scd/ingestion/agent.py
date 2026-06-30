@@ -4,7 +4,7 @@ import logging
 from typing import TYPE_CHECKING
 
 from agentic_scd.db import connect, init_db
-from agentic_scd.ingestion.sqlutil import commit, execute, placeholders
+from agentic_scd.ingestion.sqlutil import commit, dialect, execute, placeholders
 from agentic_scd.ingestion.store import row_to_signal
 
 if TYPE_CHECKING:
@@ -20,7 +20,7 @@ def read_new_signals(conn) -> list:
     signals = [row_to_signal(row) for row in rows]
     if signals:
         ids = [signal.signal_id for signal in signals]
-        style = "sqlite" if hasattr(conn, "execute") else "pyformat"
+        style = "sqlite" if dialect(conn) == "sqlite" else "pyformat"
         sql = f"UPDATE signals SET status = 'processing' WHERE signal_id IN ({placeholders(len(ids), style)})"
         execute(conn, sql, tuple(ids))
         commit(conn)

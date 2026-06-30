@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from agentic_scd.ingestion.sqlutil import dialect, execute
+
 
 @dataclass
 class RetentionSummary:
@@ -11,18 +13,18 @@ class RetentionSummary:
 
 
 def prune_seen_rejected(conn, ttl_days: int) -> int:
-    cur = conn.execute(
-        "DELETE FROM seen_rejected WHERE first_seen_at < datetime('now', ?)",
-        (f"-{ttl_days} days",),
-    )
+    if dialect(conn) == "sqlite":
+        cur = execute(conn, "DELETE FROM seen_rejected WHERE first_seen_at < datetime('now', ?)", (f"-{ttl_days} days",))
+    else:
+        cur = execute(conn, "DELETE FROM seen_rejected WHERE first_seen_at < now() - make_interval(days => %s)", (ttl_days,))
     return cur.rowcount
 
 
 def prune_signals(conn, ttl_days: int) -> int:
-    cur = conn.execute(
-        "DELETE FROM signals WHERE status = 'done' AND created_at < datetime('now', ?)",
-        (f"-{ttl_days} days",),
-    )
+    if dialect(conn) == "sqlite":
+        cur = execute(conn, "DELETE FROM signals WHERE status = 'done' AND created_at < datetime('now', ?)", (f"-{ttl_days} days",))
+    else:
+        cur = execute(conn, "DELETE FROM signals WHERE status = 'done' AND created_at < now() - make_interval(days => %s)", (ttl_days,))
     return cur.rowcount
 
 
