@@ -4,6 +4,7 @@ import logging
 
 import uvicorn
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from agentic_scd.__main__ import run
@@ -38,6 +39,14 @@ def database_mode(url: str | None) -> str:
 
 def create_app() -> FastAPI:
     app = FastAPI(title="Agentic SCD API", version="1.0.3")
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origin_regex=r"https?://(localhost|127\.0\.0\.1)(:\d+)?",
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
     @app.get("/health")
     def health() -> dict:

@@ -46,7 +46,7 @@ The system is composed of specialized agents orchestrated with LangGraph:
 | 5 | **Demand Forecasting Agent** | Trains forecasting models with Facebook Prophet; folds disruption signals into demand predictions |
 | 6 | **Simulation Agent** | Models suppliers, warehouses, ports, and retailers as network nodes using SimPy discrete-event simulation; runs Monte Carlo simulations for stockout probability and revenue impact |
 | 7 | **Mitigation Recommendation Agent** | Generates natural-language mitigation strategies using LLMs |
-| 8 | **Dashboard & Alerting** | Gradio dashboard for risk visualization, scenario analysis, and high-risk alerts |
+| 8 | **Dashboard & Alerting** | React/Vite dashboard with FastAPI-backed views for signals, runs, and system health |
 | 9 | **Evaluation** | Measures risk classification accuracy, demand forecast deviation, and simulation/recommendation quality |
 
 ## Data Sources
@@ -67,125 +67,79 @@ The system is composed of specialized agents orchestrated with LangGraph:
 - **Forecasting:** Facebook Prophet
 - **Simulation:** SimPy (discrete-event), Monte Carlo methods
 - **Ingestion:** feedparser, NLP pipelines
-- **Dashboard:** Gradio
+- **Backend API:** FastAPI + Uvicorn
+- **Dashboard:** React + TypeScript + Vite
 
 ## Project layout
 
 ```
 repo-root/
-├── backend/                # the Python service: pipeline, ingestion, agents, notebooks, tests
-│   ├── src/agentic_scd/    #   importable package
+├── backend/                # Python service: ingestion, agents, API, notebooks, tests
+│   ├── src/agentic_scd/    # importable package
 │   ├── notebooks/  tests/  scripts/  data/
 │   ├── pyproject.toml  uv.lock
 │   └── Dockerfile  .dockerignore
-├── docker-compose.yml      # orchestrates the stack (postgres + the app container)
+├── frontend/               # React + TypeScript + Vite product dashboard
+│   ├── src/                # UI components, API client, styling
+│   ├── package.json        # npm scripts and dependencies
+│   └── vite.config.ts
+├── docker-compose.yml      # orchestrates postgres and app services
 ├── .env / .env.example     # shared config (DB creds, API keys)
 └── README.md
 ```
 
 **Where to run what:** the Python project lives in **`backend/`** — run `uv` and
-`scripts/` commands from there (`cd backend`). `docker-compose.yml` and `.env` live at the
-**repo root** — run `docker compose` from the root. (A future `frontend/` React app will
-sit alongside `backend/`.)
+`scripts/` commands from there (`cd backend`). The product UI lives in **`frontend/`** —
+run `npm` there (`cd frontend`). `docker-compose.yml` and `.env` live at the **repo root** —
+run `docker compose` from the root.
 
 ## Quick start
 
-Two ways to clone and run, differing in **where the app runs** — in a container, or on
-your host via `uv`. **Postgres always runs in Docker** in both. Each brings the
-environment up and then **stops there** — no UI or pipeline starts automatically; you pick
-a run mode (CLI, Gradio, or Jupyter).
+The current product experience is a React + Vite dashboard backed by a FastAPI API.
+Start the database, launch the backend API, then start the frontend and open the UI in your browser.
 
-### Running with Docker
-
-The fastest path — **the only prerequisite is Docker** (Desktop on Windows/Mac, Engine on
-Linux; works the same in **GitHub Codespaces**). `docker compose` brings up Postgres plus
-an `app` container (Python 3.11 + uv + the project, deps preinstalled) and leaves it idle.
+### 1) Start the database
 
 ```bash
 cp .env.example .env          # Compose reads it; GROQ_API_KEY can stay empty (offline)
-docker compose up -d          # build + start postgres and the idle app (first run builds)
-docker compose ps             # postgres "healthy", app "running"
+docker compose up -d postgres
+docker compose ps             # postgres should report "healthy"
 ```
 
-Optionally load some signals into the DB (otherwise a synthetic seed is used at run time):
+### 2) Start the backend API
 
 ```bash
-docker compose exec app uv run agentic-scd-batch     # seed historical baselines
-docker compose exec app uv run agentic-scd-collect   # run the connectors once
-```
-
-Then pick a run mode — each is a single `exec` into the already-running `app` container:
-
-```bash
-# 1) CLI — end-to-end pipeline, prints a stage-by-stage summary
-docker compose exec app uv run agentic-scd
-
-# 2) Gradio dashboard — "Run pipeline" UI
-docker compose exec app uv run agentic-scd-dashboard
-#   then open http://localhost:7860
-
-# 3) Jupyter — the interactive dev notebooks (--allow-root: the container runs as root)
-docker compose exec app uv run jupyter lab --ip 0.0.0.0 --no-browser --allow-root
-#   open the printed URL, replacing the host with http://localhost:8888/...?token=...
-```
-
-`backend/src` and `backend/notebooks` are bind-mounted, so edits on your host show up live
-in the container (and notebook changes are saved back to the repo). Stop everything with
-`docker compose down` (data persists on the `pgdata` volume; add `-v` to wipe it).
-
-### Running with uv
-
-The app runs on your host; **Postgres still runs in Docker**.
-
-**Prerequisites:** **Docker** (for Postgres) and **[`uv`](https://docs.astral.sh/uv/)** —
-uv manages dependencies, runs the app, and will **provision Python 3.11+ automatically** if
-your host doesn't already have it. Install uv if you don't have it yet:
-
-```bash
-# macOS / Linux
-curl -LsSf https://astral.sh/uv/install.sh | sh
-
-# Windows (PowerShell)
-powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
-
-# …or, if you already have Python + pip:
-pip install uv
-```
-
-From the repo **root**, prepare config and start Postgres; then `cd backend` for the
-Python project (uv fetches Python 3.11+ on first sync if missing):
-
-```bash
-# repo root (where .env and docker-compose.yml live)
-cp .env.example .env              # GROQ_API_KEY can stay empty (offline)
-docker compose up -d postgres     # just the database; the app runs on uv
-docker compose ps                 # postgres should report "healthy"
-
-# the Python project
 cd backend
-uv sync --group notebooks         # create .venv + install deps (incl. Jupyter)
+uv sync
+uv run python -m uvicorn agentic_scd.api.app:create_app --host 127.0.0.1 --port 8000
 ```
 
-Optionally load some signals (otherwise a synthetic seed is used at run time):
+The API exposes `/health`, `/run`, `/collect`, `/signals`, and `/runs` for the dashboard.
+
+### 3) Start the frontend dashboard
 
 ```bash
+cd ../frontend
+npm install
+npm run dev
+```
+
+Open http://localhost:5173 (or the Vite port reported in the terminal).
+
+### 4) Optional: load initial data and run the CLI pipeline
+
+```bash
+cd ../backend
 uv run agentic-scd-batch      # seed historical baselines
 uv run agentic-scd-collect    # run the connectors once
+uv run agentic-scd            # run the CLI pipeline end to end
 ```
 
-Then pick a run mode:
+### 5) Optional: Jupyter notebooks
 
 ```bash
-# 1) CLI — end-to-end pipeline, prints a stage-by-stage summary
-uv run agentic-scd
-
-# 2) Gradio dashboard — "Run pipeline" UI
-uv run agentic-scd-dashboard
-#   then open http://localhost:7860
-
-# 3) Jupyter — the interactive dev notebooks
-uv run jupyter lab
-#   opens in your browser; pick the "Python 3 (ipykernel)" kernel
+cd backend
+uv run --group notebooks jupyter lab
 ```
 
 ## Getting Started (Phase 0 scaffold)
