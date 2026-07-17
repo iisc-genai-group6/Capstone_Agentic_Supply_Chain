@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+from datetime import UTC, datetime
 from pathlib import Path
 
 import gradio as gr
@@ -16,7 +17,17 @@ from agentic_scd.ingestion.paths import SEED_DIR, lexicon_yaml_path, run_dir, sn
 from agentic_scd.ingestion.relevance import load_lexicon
 from agentic_scd.ingestion.store import recent_runs, recent_signals, serialize_state
 from agentic_scd.llm.client import completion
-from agentic_scd.rag.retriever import history_retriever, impact_retriever, mitigation_retriever, retrieval_mode, retriever_stats
+from agentic_scd.rag.retriever import (
+    forecast_retriever,
+    history_retriever,
+    impact_retriever,
+    mitigation_retriever,
+    news_retriever,
+    retrieval_mode,
+    retriever_stats,
+    simulation_retriever,
+    weather_retriever,
+)
 from agentic_scd.runtime_warnings import suppress_known_dependency_warnings
 
 suppress_known_dependency_warnings()
@@ -36,6 +47,30 @@ def database_mode(url: str | None) -> str:
     if lowered.startswith("sqlite:"):
         return "sqlite"
     return "none"
+
+
+def event_timestamp_label(value: datetime | str | None) -> str:
+    if value is None:
+        return ""
+    if isinstance(value, str):
+        try:
+            value = datetime.fromisoformat(value.replace("Z", "+00:00"))
+        except ValueError:
+            return value
+    if value.tzinfo is None:
+        value = value.replace(tzinfo=UTC)
+    return value.astimezone(UTC).strftime("%Y-%m-%d %H:%M UTC")
+
+
+def signal_timestamp_label(signal) -> str:
+    return event_timestamp_label(signal.event_time or signal.fetched_at)
+
+
+def signal_timestamp_map(state: dict) -> dict[str, str]:
+    return {
+        signal.signal_id: signal_timestamp_label(signal)
+        for signal in state.get("new_signals", []) or []
+    }
 
 
 def kpi_markdown(state: dict) -> str:
@@ -79,7 +114,9 @@ def system_markdown(state: dict) -> str:
         f"### System status\n"
         f"**Storage mode:** {database_mode(settings.resolved_database_url)} ({status.detail})  \n"
         f"**LLM mode:** {llm_mode}  \n"
-        f"**Retrieval mode:** {retrieval_mode()} ({retriever['impact_documents']} impact docs / {retriever['mitigation_documents']} playbook docs)  \n"
+        f"**Retrieval mode:** {retrieval_mode()} via {retriever['backend']}  \n"
+        f"**Vector store:** {retriever['vector_store_path']}  \n"
+        f"**RAG corpus:** {retriever['impact_documents']} impact / {retriever['mitigation_documents']} playbook / {retriever['history_documents']} history / {retriever['forecast_documents']} forecast docs  \n"
         f"**Data home:** {data_dir}  \n"
         f"**Signals used this run:** {len(state.get('new_signals', []) or [])}  \n"
         f"**Forecast baseline:** {forecast.note if forecast else 'No forecast baseline generated.'}"
@@ -89,6 +126,7 @@ def system_markdown(state: dict) -> str:
 def signals_table(state: dict) -> pd.DataFrame:
     rows = []
     classifications = {item.signal_id: item for item in state.get("classifications", []) or []}
+    timestamps = signal_timestamp_map(state)
     for signal in state.get("new_signals", []) or []:
         cls = classifications.get(signal.signal_id)
         is_fallback = signal.source == "seed_fallback"
@@ -101,7 +139,9 @@ def signals_table(state: dict) -> pd.DataFrame:
             label = "[LIVE] "
         rows.append(
             {
+                "event_date": timestamps.get(signal.signal_id, ""),
                 "title": label + signal.title,
+                "title": signal.title,
                 "source": signal.source,
                 "region": signal.region or "",
                 "category": cls.category if cls else "",
@@ -116,14 +156,17 @@ def signals_table(state: dict) -> pd.DataFrame:
 
 def analysis_table(state: dict) -> pd.DataFrame:
     rows = []
+    timestamps = signal_timestamp_map(state)
     for item in state.get("event_analyses", []) or []:
         rows.append(
             {
+                "event_date": timestamps.get(item.signal_id, ""),
                 "event_type": item.event_type,
                 "region": item.extracted_region or "",
                 "severity_hint": item.severity_hint or "",
                 "entities": ", ".join(item.entities),
                 "summary": item.summary,
+                "context_hits": len(item.retrieved_context),
             }
         )
     return pd.DataFrame(rows)
@@ -133,9 +176,11 @@ def impact_table(state: dict) -> pd.DataFrame:
     impacts = state.get("impacts") or []
     if impacts:
         rows = []
+        timestamps = signal_timestamp_map(state)
         for impact in impacts:
             rows.append(
                 {
+                    "event_date": timestamps.get(impact.signal_id, ""),
                     "suppliers": ", ".join(impact.affected_suppliers),
                     "lanes": ", ".join(impact.affected_lanes),
                     "facilities": ", ".join(impact.affected_facilities),
@@ -170,9 +215,11 @@ def impact_table(state: dict) -> pd.DataFrame:
 
 def weather_table(state: dict) -> pd.DataFrame:
     rows = []
+    timestamps = signal_timestamp_map(state)
     for risk in state.get("weather_risks", []) or []:
         rows.append(
             {
+                "event_date": timestamps.get(risk.signal_id, ""),
                 "hub": risk.hub_port or "",
                 "region": risk.region or "",
                 "horizon_days": risk.horizon_days,
@@ -180,6 +227,7 @@ def weather_table(state: dict) -> pd.DataFrame:
                 "port_disruption_risk": risk.port_disruption_risk,
                 "peak_day": risk.peak_day or "",
                 "operations": ", ".join(risk.affected_operations),
+                "context_hits": len(risk.retrieved_context),
             }
         )
     return pd.DataFrame(rows)
@@ -342,6 +390,7 @@ def inbox_table() -> pd.DataFrame:
     return pd.DataFrame(
         [
             {
+                "event_date": signal_timestamp_label(item),
                 "title": item.title,
                 "source": item.source,
                 "type": item.source_type,
@@ -355,7 +404,13 @@ def inbox_table() -> pd.DataFrame:
 
 
 def ask_network(question: str) -> str:
-    docs = impact_retriever().search(question, top_k=3) + mitigation_retriever().search(question, top_k=3)
+    docs = (
+        impact_retriever().search(question, top_k=3)
+        + mitigation_retriever().search(question, top_k=3)
+        + news_retriever().search(question, top_k=2)
+        + forecast_retriever().search(question, top_k=2)
+        + simulation_retriever().search(question, top_k=2)
+    )
     if not docs:
         return "No local network or playbook context matched that question."
     settings = get_settings()
@@ -415,6 +470,7 @@ def config_input_value(field_name: str):
     if field_name in {
         "AGENTIC_SCD_HOME",
         "DATABASE_URL",
+        "VECTOR_DATABASE_URL",
         "AGENTIC_SCD_SOURCES_YAML",
         "AGENTIC_SCD_LEXICON_YAML",
         "GROQ_API_KEY",
@@ -427,6 +483,8 @@ def config_input_value(field_name: str):
         return os.getenv(field_name, settings.groq_model)
     if field_name == "USE_MOCK_LLM":
         return settings.use_mock_llm
+    if field_name == "RAG_AUTO_REBUILD":
+        return settings.rag_auto_rebuild
     if field_name == "INGEST_POLL_INTERVAL_MINUTES":
         return str(settings.ingest_poll_interval_minutes)
     if field_name == "INGEST_SCHEDULER_ENABLED":
@@ -463,7 +521,7 @@ def config_runtime_values() -> tuple[str, ...]:
         f"{database_mode(settings.resolved_database_url)} ({status.detail})",
         settings.resolved_database_url or "",
         llm_mode_label(settings),
-        f"{retrieval_mode()} ({retrieval['history_documents']} history / {retrieval['impact_documents']} impact / {retrieval['mitigation_documents']} mitigation)",
+        f"{retrieval_mode()} via {retrieval['backend']} ({retrieval['history_documents']} history / {retrieval['impact_documents']} impact / {retrieval['mitigation_documents']} mitigation / {retrieval['forecast_documents']} forecast)",
         str(settings.data_dir),
         str(snapshot_dir()),
         str(run_dir()),
@@ -480,6 +538,7 @@ def config_status_text(message: str) -> str:
     if message:
         lines.append(f"**{message}**")
     lines.append(f"Config file: `{local_env_path()}`")
+    lines.append("Leave `VECTOR_DATABASE_URL` blank to follow Postgres automatically when `DATABASE_URL` points to Postgres; otherwise the local-first runtime keeps a separate SQLite vector store under the data home.")
     lines.append("Next dashboard action picks up storage selection, data-home changes, YAML overrides, Groq settings, retention values, and simulation iterations.")
     lines.append("Restart the dashboard or ingestion service for `GRADIO_SERVER_NAME`, `GRADIO_SHARE`, `INGEST_HOST`, `INGEST_PORT`, `INGEST_POLL_INTERVAL_MINUTES`, and `INGEST_SCHEDULER_ENABLED`.")
     lines.append("`OPENAI_API_KEY`, `HF_TOKEN`, and `XAI_API_KEY` are stored by the panel but are not consumed by the current local-first runtime yet.")
@@ -519,6 +578,10 @@ def apply_config_panel(*args) -> tuple:
     impact_retriever.cache_clear()
     mitigation_retriever.cache_clear()
     history_retriever.cache_clear()
+    news_retriever.cache_clear()
+    weather_retriever.cache_clear()
+    forecast_retriever.cache_clear()
+    simulation_retriever.cache_clear()
     return config_snapshot(True, "Saved local-first configuration")
 
 

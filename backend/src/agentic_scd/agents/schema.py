@@ -10,6 +10,7 @@ class EventAnalysis(BaseModel):
     extracted_region: str | None = None
     severity_hint: str | None = None
     summary: str = ""
+    retrieved_context: list[str] = Field(default_factory=list)
 
 
 class Classification(BaseModel):
@@ -70,6 +71,7 @@ class Forecast(BaseModel):
     note: str = ""
     model_name: str = ""
     freight_pressure_pct: float = 0.0
+    retrieved_context: list[str] = Field(default_factory=list)
 
 
 class Simulation(BaseModel):
@@ -83,6 +85,7 @@ class Simulation(BaseModel):
     revenue_loss_p50: float = 0.0
     revenue_loss_p90: float = 0.0
     engine: str = ""
+    retrieved_context: list[str] = Field(default_factory=list)
 
 
 class MitigationAction(BaseModel):
@@ -122,3 +125,4 @@ class WeatherRiskAssessment(BaseModel):
     affected_operations: list[str] = Field(default_factory=list)
     peak_day: str | None = None
     summary: str = ""
+    retrieved_context: list[str] = Field(default_factory=list)

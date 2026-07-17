@@ -20,8 +20,8 @@ from agentic_scd.ingestion.pipeline import ingest_signals
 from agentic_scd.ingestion.relevance import load_lexicon
 from agentic_scd.ingestion.store import recent_runs, recent_signals, serialize_state
 from agentic_scd.ingestion.webhook import WebhookEvent, webhook_source
-from agentic_scd.llm.client import completion
 from agentic_scd.rag.retriever import (
+    rebuild_vector_store,
     history_retriever,
     impact_retriever,
     mitigation_retriever,
@@ -56,6 +56,10 @@ class AskRequest(BaseModel):
 
 class ConfigUpdate(BaseModel):
     values: dict[str, object]
+
+
+class VectorStoreRequest(BaseModel):
+    collections: list[str] | None = None
 
 
 def database_mode(url: str | None) -> str:
@@ -217,6 +221,13 @@ def create_app() -> FastAPI:
     @app.get("/network")
     def get_network() -> dict:
         return load_network()
+    @app.get("/vector-store")
+    def vector_store_state() -> dict:
+        return retriever_stats()
+
+    @app.post("/vector-store/rebuild")
+    def rebuild_vectors(payload: VectorStoreRequest) -> dict:
+        return rebuild_vector_store(payload.collections)
 
     @app.post("/run")
     def run_pipeline(payload: RunRequest) -> dict:

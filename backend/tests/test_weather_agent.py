@@ -106,3 +106,18 @@ def test_classify_severity_boosted_by_weather() -> None:
         f"Weather boost not visible: plain={plain.severity} boosted={boosted.severity}. "
         "Hint and reliability must keep plain severity below 10.0 so boost has headroom."
     )
+
+def test_classify_weather_enriches_confidence_and_rationale() -> None:
+    signal = weather_signal(shanghai_row())
+    risks = weather_node({"new_signals": [signal]})["weather_risks"]
+
+    boosted = classify_node({"new_signals": [signal], "weather_risks": risks})["classifications"][0]
+    plain   = classify_node({"new_signals": [signal]})["classifications"][0]
+
+    assert boosted.category == "weather"
+    assert boosted.severity > plain.severity, (
+        f"Weather boost not visible: plain={plain.severity} boosted={boosted.severity}. "
+        "Hint and reliability must keep plain severity below 10.0 so boost has headroom."
+    )
+    assert boosted.confidence > plain.confidence
+    assert "7-day hub forecast" in boosted.rationale

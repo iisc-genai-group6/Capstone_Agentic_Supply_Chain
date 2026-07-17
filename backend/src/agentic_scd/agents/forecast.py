@@ -10,6 +10,7 @@ import numpy as np
 from agentic_scd.agents.forecast_engine import adjusted_projection, baseline_projection, freight_pressure
 from agentic_scd.agents.schema import Classification, Forecast, ImpactMap
 from agentic_scd.ingestion.paths import SEED_DIR
+from agentic_scd.rag.retriever import forecast_retriever
 
 if TYPE_CHECKING:
     from agentic_scd.graph.state import GraphState
@@ -44,6 +45,32 @@ def baseline_from_dataset(path: Path | None = None) -> list[float]:
     return [round(max(10.0, baseline[idx] + 0.25 * trend * idx), 2) for idx in range(HORIZON)]
 
 
+def forecast_context(classifications: list[Classification], impacts: list[ImpactMap]) -> tuple[list[str], float]:
+    if not classifications and not impacts:
+        return [], 0.0
+    query_parts = [item.category for item in classifications]
+    for impact in impacts:
+        query_parts.extend(impact.affected_lanes[:2])
+        query_parts.extend(impact.product_categories[:2])
+    docs = forecast_retriever().search(" ".join(query_parts), top_k=4)
+    rows: list[str] = []
+    pressure = 0.0
+    for doc in docs:
+        label = (
+            doc.metadata.get("title")
+            or doc.metadata.get("name")
+            or doc.metadata.get("lane")
+            or doc.doc_id
+        )
+        rows.append(f"{label}: {doc.text}")
+        kind = str(doc.metadata.get("kind", ""))
+        if kind == "freight_rate":
+            pressure += 0.018
+        elif kind in {"demand_history", "dataset_history", "runtime_signal"}:
+            pressure += 0.01
+    return rows[:4], round(min(0.08, pressure), 4)
+
+
 def build_forecast(classifications: list[Classification], impacts: list[ImpactMap]) -> Forecast:
     risk = aggregate_risk(classifications)
     # Dominant category — pick the highest-severity classification's category
@@ -54,7 +81,8 @@ def build_forecast(classifications: list[Classification], impacts: list[ImpactMa
         dominant_category = top.category or ""
     baseline, baseline_source, model_name = baseline_projection(HORIZON)
     freight_delta, freight_source = freight_pressure()
-    adjusted, disruption_factor = adjusted_projection(baseline, risk, len(impacts), freight_delta, dominant_category)
+    retrieved_context, context_pressure = forecast_context(classifications, impacts)
+    adjusted, disruption_factor = adjusted_projection(baseline, risk, len(impacts), freight_delta + context_pressure, dominant_category)
     dates = [(date.today() + timedelta(days=7 * idx)).isoformat() for idx in range(HORIZON)]
     deviation = 0.0 if not baseline else round(100 * (sum(adjusted) - sum(baseline)) / sum(baseline), 2)
     mean_adjusted = float(np.mean(adjusted)) if adjusted else 0.0
@@ -68,8 +96,24 @@ def build_forecast(classifications: list[Classification], impacts: list[ImpactMa
         note = f"Baseline source: packaged supply-chain CSV baseline, adjusted by aggregate risk {risk:.2f}."
     else:
         note = f"Baseline source: synthetic fallback baseline, adjusted by aggregate risk {risk:.2f}."
-    note = f"{note} Forecast engine: {model_name}. Freight pressure source: {freight_source} ({freight_delta:+.1%})."
-    return Forecast(dates=dates, baseline=baseline, adjusted=adjusted, demand_deviation_pct=deviation, inventory_days_left=inventory_days, predicted_delay_days=delay, mape_estimate=mape, note=note, model_name=model_name, freight_pressure_pct=round(freight_delta * 100.0, 2))
+    note = (
+        f"{note} Forecast engine: {model_name}. Freight pressure source: "
+        f"{freight_source} ({freight_delta:+.1%}). Retrieved context pressure: "
+        f"{context_pressure:+.1%} from {len(retrieved_context)} local records."
+    )
+    return Forecast(
+        dates=dates,
+        baseline=baseline,
+        adjusted=adjusted,
+        demand_deviation_pct=deviation,
+        inventory_days_left=inventory_days,
+        predicted_delay_days=delay,
+        mape_estimate=mape,
+        note=note,
+        model_name=model_name,
+        freight_pressure_pct=round((freight_delta + context_pressure) * 100.0, 2),
+        retrieved_context=retrieved_context,
+    )
 
 
 def forecast_node(state: "GraphState") -> dict:

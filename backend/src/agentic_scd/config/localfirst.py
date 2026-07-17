@@ -22,11 +22,13 @@ class ConfigField:
 CONFIG_FIELDS: tuple[ConfigField, ...] = (
     ConfigField("AGENTIC_SCD_HOME", "Data home", "Storage"),
     ConfigField("DATABASE_URL", "Database URL", "Storage"),
+    ConfigField("VECTOR_DATABASE_URL", "Vector DB URL", "Storage"),
     ConfigField("AGENTIC_SCD_SOURCES_YAML", "Sources YAML", "Storage"),
     ConfigField("AGENTIC_SCD_LEXICON_YAML", "Lexicon YAML", "Storage"),
     ConfigField("GROQ_API_KEY", "Groq API key", "LLM", secret=True),
     ConfigField("GROQ_MODEL", "Groq model", "LLM"),
     ConfigField("USE_MOCK_LLM", "Use mock LLM", "LLM", kind="bool"),
+    ConfigField("RAG_AUTO_REBUILD", "RAG auto rebuild", "RAG", kind="bool"),
     ConfigField(
         "INGEST_POLL_INTERVAL_MINUTES",
         "Ingest poll interval minutes",

@@ -33,3 +33,5 @@ def test_named_scenario_ignores_pending_collected_signals(monkeypatch, tmp_path)
     assert classifications
     assert classifications[0].category == "weather"
     assert state["new_signals"][0].source == "scenario_library"
+    assert state["new_signals"][0].source_type == "WEATHER"
+    assert state.get("weather_risks")

@@ -8,14 +8,48 @@ from agentic_scd.agents.schema import EventAnalysis
 from agentic_scd.config import get_settings
 from agentic_scd.ingestion.schema import DisruptionSignal
 from agentic_scd.llm.client import completion
+from agentic_scd.rag.retriever import news_retriever
 
 if TYPE_CHECKING:
     from agentic_scd.graph.state import GraphState
 
 ENTITY_RE = re.compile(r"\b[A-Z][A-Za-z]+(?:\s+[A-Z][A-Za-z]+){0,3}\b")
+CATEGORY_EVENT_TYPES = {
+    "weather": "weather_disruption",
+    "logistics": "logistics_disruption",
+    "labor": "labor_disruption",
+    "labor_strike": "labor_disruption",
+    "policy": "geopolitical_disruption",
+    "geopolitical": "geopolitical_disruption",
+    "quality": "quality_disruption",
+    "raw_material": "supply_shortage_disruption",
+    "demand_shock": "demand_disruption",
+}
 
 
-def heuristic_analysis(signal: DisruptionSignal) -> EventAnalysis:
+def related_context(signal: DisruptionSignal) -> tuple[list[str], str]:
+    query = " ".join(part for part in (signal.title, signal.raw_text, signal.region or "") if part)
+    docs = news_retriever().search(query, top_k=3)
+    rows: list[str] = []
+    categories: list[str] = []
+    for doc in docs:
+        label = (
+            doc.metadata.get("title")
+            or doc.metadata.get("name")
+            or doc.metadata.get("lane")
+            or doc.doc_id
+        )
+        rows.append(f"{label}: {doc.text}")
+        category = str(doc.metadata.get("category", "")).strip().lower()
+        if category:
+            categories.append(category)
+    for category in categories:
+        if category in CATEGORY_EVENT_TYPES:
+            return rows, CATEGORY_EVENT_TYPES[category]
+    return rows, ""
+
+
+def heuristic_analysis(signal: DisruptionSignal, retrieved_context: list[str] | None = None, retrieved_event_type: str = "") -> EventAnalysis:
     text = signal.text
     entities = []
     for match in ENTITY_RE.findall(text):
@@ -34,6 +68,8 @@ def heuristic_analysis(signal: DisruptionSignal) -> EventAnalysis:
         event_type = "quality_disruption"
     elif any(term in lowered for term in ("port", "freight", "shipping", "congestion", "delay")):
         event_type = "logistics_disruption"
+    elif retrieved_event_type:
+        event_type = retrieved_event_type
     return EventAnalysis(
         signal_id=signal.signal_id,
         event_type=event_type,
@@ -41,10 +77,11 @@ def heuristic_analysis(signal: DisruptionSignal) -> EventAnalysis:
         extracted_region=signal.region,
         severity_hint=str(hint),
         summary=f"{signal.title}. {signal.raw_text[:180]}".strip(),
+        retrieved_context=list(retrieved_context or [])[:3],
     )
 
 
-def llm_analysis(signal: DisruptionSignal) -> EventAnalysis | None:
+def llm_analysis(signal: DisruptionSignal, retrieved_context: list[str] | None = None) -> EventAnalysis | None:
     settings = get_settings()
     if settings.llm_is_mock:
         return None
@@ -54,6 +91,7 @@ def llm_analysis(signal: DisruptionSignal) -> EventAnalysis | None:
             "body": signal.raw_text,
             "region": signal.region,
             "severity_hint": signal.severity_hint,
+            "retrieved_context": list(retrieved_context or [])[:3],
         },
         ensure_ascii=False,
     )
@@ -83,11 +121,13 @@ def llm_analysis(signal: DisruptionSignal) -> EventAnalysis | None:
         extracted_region=str(region) if region else None,
         severity_hint=severity_hint,
         summary=summary,
+        retrieved_context=list(retrieved_context or [])[:3],
     )
 
 
 def analyze_signal(signal: DisruptionSignal) -> EventAnalysis:
-    return llm_analysis(signal) or heuristic_analysis(signal)
+    retrieved_context, retrieved_event_type = related_context(signal)
+    return llm_analysis(signal, retrieved_context) or heuristic_analysis(signal, retrieved_context, retrieved_event_type)
 
 
 def news_node(state: "GraphState") -> dict:

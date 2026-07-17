@@ -54,13 +54,26 @@ def build_database_url(data_dir: Path) -> str:
     return f"sqlite:///{data_dir / 'agentic_scd.sqlite'}"
 
 
+def build_vector_database_url(data_dir: Path) -> str:
+    explicit = os.getenv("VECTOR_DATABASE_URL")
+    if explicit:
+        return explicit
+    database_url = build_database_url(data_dir)
+    lowered = database_url.lower()
+    if lowered.startswith("postgresql:") or lowered.startswith("postgres:"):
+        return database_url
+    return f"sqlite:///{data_dir / 'vector_store' / 'agentic_scd_vectors.sqlite'}"
+
+
 @dataclass(frozen=True)
 class Settings:
     data_dir: Path = field(default_factory=resolve_data_dir)
     database_url: str | None = None
+    vector_database_url: str | None = None
     groq_api_key: str | None = None
     groq_model: str = DEFAULT_GROQ_MODEL
     use_mock_llm: bool = False
+    rag_auto_rebuild: bool = True
     ingest_poll_interval_minutes: int = 10
     ingest_scheduler_enabled: bool = True
     ingest_host: str = "127.0.0.1"
@@ -90,9 +103,11 @@ def get_settings() -> Settings:
     return Settings(
         data_dir=data_dir,
         database_url=build_database_url(data_dir),
+        vector_database_url=build_vector_database_url(data_dir),
         groq_api_key=os.getenv("GROQ_API_KEY") or None,
         groq_model=os.getenv("GROQ_MODEL", DEFAULT_GROQ_MODEL),
         use_mock_llm=env_flag("USE_MOCK_LLM", default=False),
+        rag_auto_rebuild=env_flag("RAG_AUTO_REBUILD", default=True),
         ingest_poll_interval_minutes=env_int("INGEST_POLL_INTERVAL_MINUTES", 10),
         ingest_scheduler_enabled=env_flag("INGEST_SCHEDULER_ENABLED", default=True),
         ingest_host=os.getenv("INGEST_HOST", "127.0.0.1"),

@@ -20,6 +20,7 @@ from agentic_scd.ingestion.weather.core import (
     score_hub_risk,
     summarize_hub_forecast,
 )
+from agentic_scd.rag.retriever import weather_retriever
 
 if TYPE_CHECKING:
     from agentic_scd.graph.state import GraphState
@@ -41,6 +42,37 @@ def _hub_from_signal(signal: DisruptionSignal) -> dict[str, Any]:
     return {}
 
 
+def _retrieved_hub_context(hub: dict[str, Any]) -> tuple[list[str], list[str]]:
+    query = " ".join(
+        part
+        for part in (
+            str(hub.get("hub_port") or ""),
+            str(hub.get("region") or ""),
+            "port lane warehouse facility operations weather disruption",
+        )
+        if part
+    )
+    docs = weather_retriever().search(query, top_k=3)
+    rows: list[str] = []
+    ops: list[str] = []
+    for doc in docs:
+        label = (
+            doc.metadata.get("name")
+            or doc.metadata.get("title")
+            or doc.metadata.get("lane")
+            or doc.doc_id
+        )
+        rows.append(f"{label}: {doc.text}")
+        kind = str(doc.metadata.get("kind", ""))
+        if kind == "lanes":
+            ops.append("ocean_freight")
+        elif kind == "facilities":
+            ops.append("warehouse_operations")
+        elif kind == "suppliers":
+            ops.append("supplier_inbound")
+    return rows, list(dict.fromkeys(ops))
+
+
 def assess_weather_signal(signal: DisruptionSignal) -> WeatherRiskAssessment | None:
     """Build a hub-level risk assessment for one WEATHER signal, or None otherwise."""
     if signal.source_type != "WEATHER":
@@ -53,7 +85,7 @@ def assess_weather_signal(signal: DisruptionSignal) -> WeatherRiskAssessment | N
     days = parse_daily_series(hub, response)
     aggregate = score_hub_risk(days)
     peak = peak_day(days)
-    # Port disruption likelihood scales with aggregate severity on the 1-10 scale.
+    retrieved_context, contextual_operations = _retrieved_hub_context(hub)
     port_risk = round(min(1.0, max(0.0, (aggregate - 1.0) / 9.0)), 4)
     return WeatherRiskAssessment(
         signal_id=signal.signal_id,
@@ -65,9 +97,12 @@ def assess_weather_signal(signal: DisruptionSignal) -> WeatherRiskAssessment | N
         daily_forecasts=days,
         aggregate_severity=aggregate,
         port_disruption_risk=port_risk,
-        affected_operations=operations_at_risk(days, hub),
+        affected_operations=list(
+            dict.fromkeys(operations_at_risk(days, hub) + contextual_operations)
+        ),
         peak_day=peak.date if peak else None,
         summary=summarize_hub_forecast(hub, days),
+        retrieved_context=retrieved_context[:3],
     )
 
 

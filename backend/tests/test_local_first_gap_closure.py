@@ -31,27 +31,22 @@ def make_signal(title: str, body: str, region: str, hint: str = "severe") -> Dis
 
 
 def test_weather_node_extracts_risk_row() -> None:
-    import json
-    # weather_node only processes WEATHER source_type signals with a structured
-    # raw_payload. Use the packaged fallback snapshot (same as test_weather_agent).
-    hubs = json.loads((FALLBACK_DIR / "open_meteo_hubs.json").read_text(encoding="utf-8"))
-    shanghai = next(row for row in hubs if row["hub"]["hub_port"] == "Port of Shanghai")
-    hub = shanghai["hub"]
+    snapshot = json.loads((FALLBACK_DIR / "open_meteo_hubs.json").read_text(encoding="utf-8"))
+    row = next(item for item in snapshot if item["hub"]["hub_port"] == "Port of Shanghai")
     signal = DisruptionSignal(
-        signal_id="test-weather",
+        signal_id="weather-shanghai",
         source="open_meteo",
         source_type="WEATHER",
         source_reliability=0.9,
         fetched_at=datetime.now(UTC),
-        title="Weather forecast for Port of Shanghai",
-        raw_text="",
-        location=Location(**hub),
+        title="Typhoon closes Shanghai port",
+        raw_text="Typhoon flooding and gale force winds are shutting container handling at Shanghai port.",
+        location=Location(**row["hub"]),
         severity_hint="severe",
-        raw_payload={"hub": hub, "response": shanghai["response"]},
+        raw_payload={"hub": row["hub"], "response": row["response"]},
     )
     rows = weather_node({"new_signals": [signal]})["weather_risks"]
     assert len(rows) == 1
-    # WeatherRiskAssessment uses aggregate_severity (not alert_level/severity_score)
     assert rows[0].aggregate_severity >= 7.0
     assert rows[0].region == "China"
 

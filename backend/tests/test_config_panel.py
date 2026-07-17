@@ -81,3 +81,18 @@ def test_registry_and_lexicon_follow_runtime_overrides(
     assert any(connector.name == "custom_synthetic" for connector in connectors)
     assert terms == ("harbor closure", "customs strike")
     load_lexicon.cache_clear()
+
+
+def test_vector_database_defaults_to_postgres_when_primary_database_is_postgres(
+    monkeypatch, tmp_path
+) -> None:
+    monkeypatch.setenv("AGENTIC_SCD_HOME", str(tmp_path))
+    monkeypatch.setenv(
+        "DATABASE_URL", "postgresql://user:pass@localhost:5432/agentic"
+    )
+    monkeypatch.delenv("VECTOR_DATABASE_URL", raising=False)
+    get_settings.cache_clear()
+    settings = get_settings()
+    assert settings.database_url == "postgresql://user:pass@localhost:5432/agentic"
+    assert settings.vector_database_url == settings.database_url
+    get_settings.cache_clear()

@@ -10,7 +10,7 @@ from agentic_scd.ingestion.connectors.rss import RssConnector
 from agentic_scd.ingestion.connectors.synthetic import SyntheticConnector
 from agentic_scd.ingestion.paths import FALLBACK_DIR, SEED_DIR
 from agentic_scd.ingestion.store import recent_runs, recent_signals
-from agentic_scd.rag.retriever import retrieval_mode, retriever_stats
+from agentic_scd.rag.retriever import rebuild_vector_store, retrieval_mode, retriever_stats
 
 
 def database_mode(url: str | None) -> str:
@@ -33,7 +33,8 @@ class ExternalDataMCP:
             {"name": "load_network_knowledge", "description": "Load the packaged supplier, facility, and lane knowledge graph."},
             {"name": "load_mitigation_playbooks", "description": "Load the packaged mitigation playbooks used by the recommendation agent."},
             {"name": "load_seed_corpus", "description": "Inspect the packaged synthetic and historical disruption corpora."},
-            {"name": "inspect_vector_store", "description": "Inspect local-first hybrid retrieval mode and corpus sizes."},
+            {"name": "inspect_vector_store", "description": "Inspect the local-first separate vector store, collections, and corpus sizes."},
+            {"name": "rebuild_vector_store", "description": "Rebuild one or more local-first vector-store collections from the current corpora."},
             {"name": "inspect_runtime_state", "description": "Inspect the local runtime mode, database health, and recent persisted data."},
             {"name": "synthetic_scenarios", "description": "Return deterministic synthetic disruption scenarios."},
         ]
@@ -80,6 +81,9 @@ class ExternalDataMCP:
             }
         if name == "inspect_vector_store":
             return {"mode": retrieval_mode(), **retriever_stats()}
+        if name == "rebuild_vector_store":
+            collections = arguments.get("collections")
+            return rebuild_vector_store(collections if isinstance(collections, list) else None)
         if name == "inspect_runtime_state":
             settings = get_settings()
             status = ping(settings)
@@ -100,6 +104,7 @@ class ExternalDataMCP:
                 "llm_mode": "mock" if settings.llm_is_mock else f"groq:{settings.groq_model}",
                 "data_dir": str(settings.data_dir),
                 "retrieval_mode": retrieval_mode(),
+                "vector_store_path": retriever_stats()["vector_store_path"],
                 "recent_signals": signals,
                 "recent_runs": runs,
             }
