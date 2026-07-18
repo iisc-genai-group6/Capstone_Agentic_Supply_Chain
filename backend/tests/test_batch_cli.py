@@ -5,7 +5,11 @@ returns False and the connection stays ``None``.
 """
 
 from agentic_scd.ingestion import batch_cli
-from tests.fakes import make_settings
+
+if __package__:
+    from .fakes import make_settings
+else:
+    from fakes import make_settings
 
 
 def test_run_offline_loads_seed_and_skips_retention() -> None:

@@ -7,7 +7,11 @@ and exercises idempotency through a ``FakeConn`` (no Postgres, no network).
 from agentic_scd.ingestion.batch import freightos, kaggle, load_batch
 from agentic_scd.ingestion.connectors.base import SourceType
 from agentic_scd.ingestion.schema import DisruptionSignal
-from tests.fakes import FakeConn, make_settings
+
+if __package__:
+    from .fakes import FakeConn, make_settings
+else:
+    from fakes import FakeConn, make_settings
 
 
 def test_freightos_build_signals_counts_and_type() -> None:

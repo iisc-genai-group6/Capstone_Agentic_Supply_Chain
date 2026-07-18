@@ -16,7 +16,11 @@ from agentic_scd.ingestion.retention import (
     prune_signals,
     run_retention,
 )
-from tests.fakes import make_settings
+
+if __package__:
+    from .fakes import make_settings
+else:
+    from fakes import make_settings
 
 
 def test_run_retention_no_db_is_clean_noop() -> None:
