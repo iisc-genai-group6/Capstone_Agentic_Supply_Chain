@@ -501,7 +501,7 @@ The implementation now contains a working end-to-end system rather than only a s
 
 The default runtime is offline-safe. Live RSS and weather calls are attempted by the collector, but cached fallback data is used automatically when the network is unavailable.
 
-## Local First Project layout (embedded inside the Notebook based Proect)
+## Local First Project layout (embedded inside the Notebook based Project)
 
 ```text
 Capstone_Agentic_Supply_Chain/
