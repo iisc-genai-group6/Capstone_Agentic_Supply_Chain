@@ -10,15 +10,24 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from agentic_scd.__main__ import run
+from agentic_scd.agents.schema import Classification, Forecast, ImpactMap
+from agentic_scd.agents.simulate import run_simulation
 from agentic_scd.config import get_settings
 from agentic_scd.config.localfirst import CONFIG_FIELDS, apply_runtime_env, local_env_path
 from agentic_scd.db import connect, init_db, ping
+from agentic_scd.db.client import DatabaseNotConfiguredError
 from agentic_scd.ingestion.collect import collect
 from agentic_scd.ingestion.normalize import normalize
 from agentic_scd.ingestion.paths import SEED_DIR
 from agentic_scd.ingestion.pipeline import ingest_signals
 from agentic_scd.ingestion.relevance import load_lexicon
-from agentic_scd.ingestion.store import recent_runs, recent_signals, serialize_state
+from agentic_scd.ingestion.store import (
+    list_approvals,
+    recent_runs,
+    recent_signals,
+    save_approval,
+    serialize_state,
+)
 from agentic_scd.ingestion.webhook import WebhookEvent, webhook_source
 from agentic_scd.observability import configure_tracing
 from agentic_scd.rag.retriever import (
@@ -62,6 +71,28 @@ class ConfigUpdate(BaseModel):
 
 class VectorStoreRequest(BaseModel):
     collections: list[str] | None = None
+
+
+class WhatIfOverrides(BaseModel):
+    safety_stock_days: float | None = None
+    alt_supplier_share_pct: float | None = None
+    lead_time_mean_days: float | None = None
+
+
+class WhatIfRequest(BaseModel):
+    classifications: list[dict] = []
+    impacts: list[dict] = []
+    forecast: dict | None = None
+    iterations: int | None = None
+    overrides: WhatIfOverrides = WhatIfOverrides()
+
+
+class ApprovalRequest(BaseModel):
+    run_id: str
+    action_index: int
+    action_text: str
+    owner: str | None = None
+    approved_by: str | None = None
 
 
 def database_mode(url: str | None) -> str:
@@ -236,6 +267,21 @@ def create_app() -> FastAPI:
         state = run(payload.scenario_name, use_pending_signals=payload.use_pending_signals)
         return serialize_state(state)
 
+    @app.post("/what-if")
+    def what_if(payload: WhatIfRequest) -> dict:
+        classifications = [Classification(**item) for item in payload.classifications]
+        impacts = [ImpactMap(**item) for item in payload.impacts]
+        forecast = Forecast(**payload.forecast) if payload.forecast else None
+        overrides = payload.overrides.model_dump(exclude_none=True)
+        simulation = run_simulation(
+            classifications,
+            impacts,
+            forecast,
+            iterations=payload.iterations,
+            overrides=overrides,
+        )
+        return simulation.model_dump(mode="json")
+
     @app.post("/collect")
     def collect_sources() -> dict:
         summary = collect()
@@ -264,6 +310,40 @@ def create_app() -> FastAPI:
         with connect() as conn:
             result = ingest_signals([signal], conn)
         return {"kept": result.kept, "dropped": result.dropped, "persisted": result.persisted, "duplicate": result.duplicate, "persisted_to_db": result.persisted > 0}
+
+    @app.post("/approvals")
+    def create_approval(payload: ApprovalRequest) -> dict:
+        saved = False
+        try:
+            init_db()
+            with connect() as conn:
+                saved = save_approval(
+                    conn,
+                    payload.run_id,
+                    payload.action_index,
+                    payload.action_text,
+                    payload.owner,
+                    payload.approved_by,
+                )
+        except DatabaseNotConfiguredError:
+            saved = False
+        return {
+            "persisted": saved,
+            "run_id": payload.run_id,
+            "action_index": payload.action_index,
+            "action_text": payload.action_text,
+            "owner": payload.owner,
+            "approved_by": payload.approved_by,
+        }
+
+    @app.get("/approvals")
+    def get_approvals(run_id: str) -> dict:
+        try:
+            init_db()
+            with connect() as conn:
+                return {"approvals": list_approvals(conn, run_id)}
+        except DatabaseNotConfiguredError:
+            return {"approvals": []}
 
     @app.get("/signals")
     def list_signals(limit: int = 50) -> dict:

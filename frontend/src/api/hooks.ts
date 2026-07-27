@@ -2,13 +2,16 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { client } from "./client";
 import type {
+  Approval,
   CollectResult,
   ConfigSnapshot,
   DisruptionSignal,
   HealthResponse,
   PipelineState,
   RecentRun,
+  Simulation,
   SupplyNetwork,
+  WhatIfRequest,
 } from "../types/state";
 
 export interface RunArgs {
@@ -70,6 +73,37 @@ export function useRunPipeline() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["runs"] });
       queryClient.invalidateQueries({ queryKey: ["signals"] });
+    },
+  });
+}
+
+export function useWhatIf() {
+  return useMutation({
+    mutationFn: async (args: WhatIfRequest) =>
+      (await client.post<Simulation>("/what-if", args)).data,
+  });
+}
+
+export function useApprovals(runId: string | undefined) {
+  return useQuery({
+    queryKey: ["approvals", runId],
+    queryFn: async () =>
+      (
+        await client.get<{ approvals: Approval[] }>("/approvals", {
+          params: { run_id: runId },
+        })
+      ).data.approvals,
+    enabled: Boolean(runId),
+  });
+}
+
+export function useApproveAction() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (args: Approval) =>
+      (await client.post<Approval>("/approvals", args)).data,
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["approvals", variables.run_id] });
     },
   });
 }

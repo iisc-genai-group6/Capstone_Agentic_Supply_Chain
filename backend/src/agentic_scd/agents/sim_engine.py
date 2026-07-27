@@ -145,6 +145,7 @@ def _run_one_iteration(
     inventory: float,
     daily_demand: float,
     n_affected_nodes: int,
+    lead_time_mean: float = KAGGLE_LEAD_TIME_MEAN,
 ) -> tuple[bool, float, float, float, float]:
     """Simulate one 30-day window and return
     (stockout_occurred, shortage_units, revenue_lost, recovery_days, service_level).
@@ -157,11 +158,13 @@ def _run_one_iteration(
         return _simpy_iteration(
             rng, risk, transit_days, supplier_reliability,
             defect_rate, inventory, daily_demand, n_affected_nodes,
+            lead_time_mean,
         )
     except ImportError:
         return _numpy_fallback_iteration(
             rng, risk, transit_days, supplier_reliability,
             defect_rate, inventory, daily_demand, n_affected_nodes,
+            lead_time_mean,
         )
 
 
@@ -174,6 +177,7 @@ def _simpy_iteration(
     inventory: float,
     daily_demand: float,
     n_affected_nodes: int,
+    lead_time_mean: float = KAGGLE_LEAD_TIME_MEAN,
 ) -> tuple[bool, float, float, float, float]:
     """SimPy implementation of the 4-node supply chain model.
 
@@ -241,7 +245,7 @@ def _simpy_iteration(
         # of how many other orders are in flight.
         lead_time = max(
             0.5,
-            float(rng.normal(KAGGLE_LEAD_TIME_MEAN, KAGGLE_LEAD_TIME_STD)),
+            float(rng.normal(lead_time_mean, KAGGLE_LEAD_TIME_STD)),
         )
         with supplier.request() as req:
             yield req
@@ -353,6 +357,7 @@ def _numpy_fallback_iteration(
     inventory: float,
     daily_demand: float,
     n_affected_nodes: int,
+    lead_time_mean: float = KAGGLE_LEAD_TIME_MEAN,
 ) -> tuple[bool, float, float, float, float]:
     """Pure-numpy fallback when SimPy is not installed.
 
@@ -361,7 +366,7 @@ def _numpy_fallback_iteration(
     shortages when demand exceeds supply + inventory.
     """
     days           = SIM_DAYS
-    supply_per_day = (daily_demand * days / SHIPMENTS_PER_RUN) / (transit_days + 2.0)
+    supply_per_day = (daily_demand * days / SHIPMENTS_PER_RUN) / (transit_days + lead_time_mean * 0.125)
     capacity_factor = max(0.10, (1.0 - risk) * supplier_reliability)
     # FIX: was (1.0 - defect_rate * risk) which double-applied risk on top of
     # an already risk-amplified defect_rate.  Use plain (1 - defect_rate).
@@ -396,6 +401,7 @@ def run_discrete_event(
     impacts: list[ImpactMap],
     forecast: Forecast | None,
     iterations: int,
+    overrides: dict | None = None,
 ) -> dict[str, float | int | str]:
     """Run a Monte Carlo supply chain simulation and return a results dict.
 
@@ -414,6 +420,14 @@ def run_discrete_event(
     iterations:
         Number of Monte Carlo iterations.  Set via SIMULATION_ITERATIONS env
         var (default 300).  Proposal target for demo: 200.
+    overrides:
+        Optional what-if mitigation knobs.  When None the simulation behaves
+        exactly as the pipeline default.  Recognised keys:
+          * safety_stock_days (float >= 0): extra days of opening inventory.
+          * alt_supplier_share_pct (0-100): share of volume shifted to a more
+            reliable alternate supplier, reducing effective defect losses.
+          * lead_time_mean_days (float > 0): overrides the mean supplier lead
+            time (default 16d) for first-ship ETA and per-shipment draws.
 
     Returns
     -------
@@ -425,6 +439,14 @@ def run_discrete_event(
     risk      = aggregate_risk(classifications)
     affected  = sum(len(item.affected_entities) for item in impacts)
     n_iters   = max(1, iterations)
+
+    # --- what-if overrides ---
+    overrides = overrides or {}
+    safety_stock_days = max(0.0, float(overrides.get("safety_stock_days", 0.0) or 0.0))
+    alt_supplier_share = min(1.0, max(0.0, float(overrides.get("alt_supplier_share_pct", 0.0) or 0.0) / 100.0))
+    _lt_override = overrides.get("lead_time_mean_days")
+    lead_time_mean = float(_lt_override) if _lt_override else KAGGLE_LEAD_TIME_MEAN
+    lead_time_mean = max(0.5, lead_time_mean)
 
     # --- demand calibration ---
     # The Kaggle CSV rows contain "products sold + 0.35*stock" per SKU, not
@@ -465,9 +487,10 @@ def run_discrete_event(
     transit            = _extract_transit_days(impacts)
     port_delay_mean    = 0.5 + risk * 1.5
     transit_risk       = transit * (1.0 + 0.15 * risk)
-    first_ship_eta     = KAGGLE_LEAD_TIME_MEAN + port_delay_mean + transit_risk
+    first_ship_eta     = lead_time_mean + port_delay_mean + transit_risk
     safety_buffer      = 8.0 * (1.0 - risk)
-    nominal_cover_days = max(first_ship_eta + safety_buffer, _forecast_inv_days)
+    # What-if: extra safety stock lifts the opening inventory cover directly.
+    nominal_cover_days = max(first_ship_eta + safety_buffer + safety_stock_days, _forecast_inv_days)
     inventory_start    = daily_demand * nominal_cover_days
 
     # --- network calibration from impact data ---
@@ -479,6 +502,13 @@ def run_discrete_event(
     # diversion losses).  Kept below the Kaggle inspection-failure rate (36%)
     # at low risk because inspections catch defects before they become losses.
     defect_rate = min(0.40, 0.05 + 0.35 * risk)
+
+    # What-if: shifting volume to a more reliable alternate supplier improves
+    # effective reliability and cuts shipment losses proportionally to the share.
+    if alt_supplier_share > 0.0:
+        ALT_RELIABILITY = 0.95
+        supplier_reliability = supplier_reliability * (1.0 - alt_supplier_share) + ALT_RELIABILITY * alt_supplier_share
+        defect_rate = defect_rate * (1.0 - 0.5 * alt_supplier_share)
 
     # --- Monte Carlo ---
     # Deterministic seed so the same scenario produces the same output;
@@ -502,6 +532,7 @@ def run_discrete_event(
             inventory_start,
             daily_demand,
             affected,
+            lead_time_mean,
         )
         stockouts.append(float(stockout))
         shortages.append(shortage)

@@ -41,7 +41,7 @@ def simulation_context(
     return rows[:4], round(min(1.12, multiplier), 4)
 
 
-def run_simulation(classifications: list[Classification], impacts: list[ImpactMap], forecast: Forecast | None = None, iterations: int | None = None) -> Simulation:
+def run_simulation(classifications: list[Classification], impacts: list[ImpactMap], forecast: Forecast | None = None, iterations: int | None = None, overrides: dict | None = None) -> Simulation:
     settings = get_settings()
     n = iterations or settings.simulation_iterations
     risk = aggregate_risk(classifications)
@@ -49,7 +49,7 @@ def run_simulation(classifications: list[Classification], impacts: list[ImpactMa
     if risk <= 0 and affected <= 0:
         return Simulation(stockout_probability=0.0, revenue_impact=0.0, recovery_time_days=0.0, service_level=1.0, expected_shortage_units=0.0, iterations=n, assumptions="No active risk or affected network nodes.", engine="discrete_event_local")
     retrieved_context, calibration = simulation_context(classifications, impacts, forecast)
-    data = run_discrete_event(classifications, impacts, forecast, n)
+    data = run_discrete_event(classifications, impacts, forecast, n, overrides)
     stockout_probability = min(1.0, float(data["stockout_probability"]) * min(1.05, calibration))
     revenue_impact = float(data["revenue_impact"]) * calibration
     recovery_time_days = float(data["recovery_time_days"]) * (1.0 + max(0.0, calibration - 1.0) * 0.6)

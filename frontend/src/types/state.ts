@@ -211,3 +211,27 @@ export interface SupplyNetwork {
   facilities: NetworkEntity[];
   lanes: NetworkLane[];
 }
+
+export interface WhatIfOverrides {
+  safety_stock_days?: number | null;
+  alt_supplier_share_pct?: number | null;
+  lead_time_mean_days?: number | null;
+}
+
+export interface WhatIfRequest {
+  classifications: Classification[];
+  impacts: ImpactMap[];
+  forecast?: Forecast | null;
+  iterations?: number | null;
+  overrides: WhatIfOverrides;
+}
+
+export interface Approval {
+  id?: number;
+  run_id: string;
+  action_index: number;
+  action_text: string;
+  owner?: string | null;
+  approved_by?: string | null;
+  created_at?: string;
+}

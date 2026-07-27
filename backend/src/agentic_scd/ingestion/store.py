@@ -259,6 +259,65 @@ def recent_runs(conn, limit: int = 10) -> list[dict]:
     return out
 
 
+APPROVAL_COLUMNS = ["id", "run_id", "action_index", "action_text", "owner", "approved_by", "created_at"]
+
+
+def approval_to_dict(row) -> dict:
+    if isinstance(row, dict):
+        return row
+    try:
+        return dict(row)
+    except Exception:
+        pass
+    if isinstance(row, tuple):
+        return dict(zip(APPROVAL_COLUMNS, row))
+    return {}
+
+
+def save_approval(
+    conn,
+    run_id: str,
+    action_index: int,
+    action_text: str,
+    owner: str | None = None,
+    approved_by: str | None = None,
+) -> bool:
+    if conn is None:
+        return False
+    if dialect(conn) == "sqlite":
+        execute(
+            conn,
+            "INSERT OR REPLACE INTO approvals (run_id, action_index, action_text, owner, approved_by) VALUES (?, ?, ?, ?, ?)",
+            (run_id, action_index, action_text, owner, approved_by),
+        )
+    else:
+        execute(
+            conn,
+            "INSERT INTO approvals (run_id, action_index, action_text, owner, approved_by) VALUES (%s, %s, %s, %s, %s) ON CONFLICT (run_id, action_index) DO UPDATE SET action_text = EXCLUDED.action_text, owner = EXCLUDED.owner, approved_by = EXCLUDED.approved_by",
+            (run_id, action_index, action_text, owner, approved_by),
+        )
+    commit(conn)
+    return True
+
+
+def list_approvals(conn, run_id: str) -> list[dict]:
+    if conn is None:
+        return []
+    if dialect(conn) == "sqlite":
+        rows = execute(
+            conn,
+            "SELECT id, run_id, action_index, action_text, owner, approved_by, created_at FROM approvals WHERE run_id = ? ORDER BY action_index",
+            (run_id,),
+        ).fetchall()
+    else:
+        rows = execute(
+            conn,
+            "SELECT id, run_id, action_index, action_text, owner, approved_by, created_at FROM approvals WHERE run_id = %s ORDER BY action_index",
+            (run_id,),
+        ).fetchall()
+    return [approval_to_dict(row) for row in rows]
+
+
 def recent_signals(conn, limit: int = 50) -> list[DisruptionSignal]:
     if conn is None:
         return []

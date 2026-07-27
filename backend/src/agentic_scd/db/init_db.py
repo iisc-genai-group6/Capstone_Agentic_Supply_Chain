@@ -40,6 +40,17 @@ CREATE TABLE IF NOT EXISTS pipeline_runs (
     max_severity DOUBLE PRECISION,
     payload JSONB NOT NULL
 );
+CREATE TABLE IF NOT EXISTS approvals (
+    id BIGSERIAL PRIMARY KEY,
+    run_id TEXT NOT NULL,
+    action_index INTEGER NOT NULL,
+    action_text TEXT NOT NULL,
+    owner TEXT,
+    approved_by TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    UNIQUE (run_id, action_index)
+);
+CREATE INDEX IF NOT EXISTS idx_approvals_run_id ON approvals (run_id);
 """
 
 
