@@ -834,7 +834,7 @@ Run it in dev against a locally running API (`agentic-scd-api` on `:8000`):
 ```bash
 cd frontend
 npm install                   # first time only
-npm run dev                   # Vite dev server -> http://localhost:3000
+npm run dev                   # Vite dev server -> http://localhost:3001
 ```
 
 The API is reached at **`/api`** on the same host as the UI (nginx or the Vite dev
