@@ -1,13 +1,13 @@
 # Dev + demo stack: a local Postgres, an idle `app` container (Python 3.11 + uv + the
 # project), the FastAPI service (`api` -> localhost:8000), and the React + Ant Design
-# product UI (`frontend` -> localhost:3000). `docker compose up` starts postgres, the
+# product UI (`frontend` -> localhost:3001). `docker compose up` starts postgres, the
 # API, and the React UI; the `app` container stays idle so you can still exec the Gradio
 # dashboard or Jupyter into it. Values are read from the project-root `.env` (Compose
 # loads it automatically).
 #
 #   docker compose up -d                 # build + start postgres, api, frontend, idle app
 #   docker compose up -d postgres        # just the database (local `uv` workflow)
-#   # -> React UI:   http://localhost:3000   (product-facing, calls the API)
+#   # -> React UI:   http://localhost:3001   (product-facing, calls the API)
 #   # -> FastAPI:    http://localhost:8000/docs
 #   docker compose exec app uv run agentic-scd            # CLI run
 #   docker compose exec app uv run agentic-scd-dashboard  # Gradio -> localhost:7860
@@ -118,7 +118,7 @@ services:
     depends_on:
       - api
     ports:
-      - "${FRONTEND_PORT:-3001}:80"     # React UI (3000 often taken by Grafana)
+      - "${FRONTEND_PORT:-3001}:80"     # React UI (3001 often taken by Grafana)
     restart: unless-stopped
 
 volumes:
