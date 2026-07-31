@@ -275,7 +275,7 @@ docker compose ps             # postgres "healthy"; api, frontend, app "running"
 Once up, open the product UI and the API docs:
 
 ```text
-http://localhost:3000         # React + Ant Design dashboard (calls the API)
+http://localhost:3001         # React + Ant Design dashboard (calls the API)
 http://localhost:8000/docs    # FastAPI interactive docs
 ```
 
@@ -943,7 +943,7 @@ docker compose up --build
 Then open the product UI or the API docs:
 
 ```text
-http://localhost:3000         # React + Ant Design dashboard
+http://localhost:3001         # React + Ant Design dashboard
 http://localhost:8000/docs    # FastAPI interactive docs
 ```
 
